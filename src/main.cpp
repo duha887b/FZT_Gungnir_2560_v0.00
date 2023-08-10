@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
-#include <semphr.h>
+//#include <Arduino_FreeRTOS.h>
+//#include <semphr.h>
 #include "pages.h"
 #include "stepper.h"
 
@@ -75,6 +75,9 @@ void stepperMove(void* pvParameters){
     
 }
 */
+
+
+
 void setup(){
     Serial.begin(115200);
     Serial.println("Startet");

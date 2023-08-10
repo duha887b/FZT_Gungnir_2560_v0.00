@@ -51,7 +51,7 @@ void setDir(bool dir){
     DIR = dir;
     digitalWrite(pDIR,DIR);
 }
-
+/*
 
 void cycle(TickType_t* xLast){
 
@@ -72,6 +72,7 @@ void cycle(TickType_t* xLast){
     
     }
 }
+*/
 
 void stepPerSecond(){
     sPS = microsStepp/mmPerRotaion * Speed;
