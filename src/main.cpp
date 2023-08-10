@@ -79,8 +79,8 @@ void stepperMove(void* pvParameters){
 
 
 void setup(){
-    Serial.begin(115200);
-    Serial.println("Startet");
+    
+    //Serial.println("Startet");
 
     setupPages();
     landingPage();
@@ -90,6 +90,8 @@ void setup(){
     enableMotor(0);
     setDir(0);
 
+    setFrequenz_Timer1(111);
+
     stepper_TimerInteruptModeSetup();
     stepper_timerModeStop();
 
@@ -98,7 +100,7 @@ void setup(){
 void loop(){
     //main loop ....
     startTouch();
-    setFrequenz_Timer1(9999);
+    
     
 
 }

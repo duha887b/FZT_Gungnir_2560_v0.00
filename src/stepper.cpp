@@ -2,6 +2,7 @@
 
 const unsigned int minPulsLOW = 2.5; //us
 const unsigned int minPulsHIGH = 2.5;//us
+#define maxfrquenz = 100000;//Hz
 const unsigned int microsStepp = 400; // steps per rotation (1.8° Stpep)
 
 const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3 
@@ -91,6 +92,10 @@ float get_position(){
     return (position/microsStepp)*mmPerRotaion;
 }
 
+
+
+//Timer 1 with intterupt for Wave genaration
+
 void stepper_TimerInteruptModeSetup(){
     //Timer 1 16bit (overflow at 65536)
 
@@ -115,16 +120,36 @@ void stepper_TimerInteruptModeSetup(){
 
 }
 
-bool setFrequenz_Timer1(int f){
-    if(f>65536){return 0;}
+float TOP[5]; //Prescalar or N S157 Manuel
+int N[5] = {18,64,256,1024}; //Prescalar
+int
+
+bool setFrequenz_Timer1( int f){
+
+    if(f>maxfrquenz){return false;} // controller based max frequenz
+    Serial.begin(115200);
+
+    for(int i = 0; i<sizeof(TOP)/sizeof(float);i++){  //find nearest mathing frequenz
+
+    
+        TOP[i] = ((float)F_CPU/((float)f*(float)N[i])-1);  // calc TOP for each combination 
+        if (TOP[i]> 65535 ){ // check overflow on 16bit Register 
+            TOP[i] = -1;
+        }
+        Serial.println(TOP[i]);
+
+
+
+    }
+    
+
     OCR1A = f;
-    return 1;
+    return true;
 
 }
 
 void stepper_timerModeRun(){
     enableMotor(0);
-    
     TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
     
 }
@@ -135,6 +160,7 @@ void stepper_timerModeStop(){
     
 }
 
+//workhorse 
 ISR(TIMER1_COMPA_vect) {
     //Serial.println(1);
     step();

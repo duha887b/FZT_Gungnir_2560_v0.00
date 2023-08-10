@@ -23,7 +23,7 @@ float get_position();
 
 void stepper_TimerInteruptModeSetup();
 
-bool setFrequenz_Timer1(int f);
+bool setFrequenz_Timer1( int f);
 
 void stepper_timerModeRun();
 
