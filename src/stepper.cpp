@@ -2,7 +2,7 @@
 
 const unsigned int minPulsLOW = 2.5; //us
 const unsigned int minPulsHIGH = 2.5;//us
-#define maxfrquenz = 100000;//Hz
+const unsigned int maxfrquenz = 100000;//Hz
 const unsigned int microsStepp = 400; // steps per rotation (1.8° Stpep)
 
 const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3 
@@ -120,30 +120,85 @@ void stepper_TimerInteruptModeSetup(){
 
 }
 
-float TOP[5]; //Prescalar or N S157 Manuel
-int N[5] = {18,64,256,1024}; //Prescalar
-int
+float TOP[5]; //TOP S157 Manuel
+int N[5] = {1,8,64,256,1024}; //Prescalar
+long int NTop[2]; // final descision TOP & N
 
-bool setFrequenz_Timer1( int f){
+bool setFrequenz_Timer1(unsigned int f){
 
-    if(f>maxfrquenz){return false;} // controller based max frequenz
+   if(f>maxfrquenz){return false;} // controller based max frequenz
     Serial.begin(115200);
 
-    for(int i = 0; i<sizeof(TOP)/sizeof(float);i++){  //find nearest mathing frequenz
-
+    for(int i = 0; i<(int)(sizeof(TOP)/sizeof(float));i++){  
     
         TOP[i] = ((float)F_CPU/((float)f*(float)N[i])-1);  // calc TOP for each combination 
         if (TOP[i]> 65535 ){ // check overflow on 16bit Register 
             TOP[i] = -1;
         }
         Serial.println(TOP[i]);
-
-
-
     }
+
+    float tmp_1 = 1;
+    
+    for(int i = 0;i<(int)(sizeof(TOP)/sizeof(float));i++ ){ //find nearest mathing frequenz
+        float tmp;
+        int flag = 0; //aufrunden
+
+        if(TOP[i] == -1){continue;}
+        tmp = TOP[i] - (long int)TOP[i];
+        if(tmp>0.5){
+            tmp = 1-tmp;
+            flag = 1;
+        }else{
+            flag = 0;
+        }
+
+        if(tmp<tmp_1){
+            NTop[0] = N[i];
+            NTop[1] = (long int)TOP[i] + flag;
+            tmp_1 = tmp;
+            
+        }
+        if (tmp == tmp_1){
+            if(NTop[1]>(long int)TOP[i] + flag){
+                NTop[0] = N[i];
+                NTop[1] = (long int)TOP[i] + flag;
+            }
+        }
+        
+    }
+    Serial.println(NTop[0]);
+    Serial.println(NTop[1]);
+
+
+    OCR1A = NTop[1]; //set tTOP value
+
+    switch (NTop[0]) // set prescalar
+    {
+    case 1:
+        TCCR1B |= 0x01; //N prescalar S157 Manuel
+        break;
+    case 8:
+        TCCR1B |= 0x02; //N prescalar S157 Manuel
+        break;
+
+    case 64:
+        TCCR1B |= 0x03; //N prescalar S157 Manuel
+        break;
+    case 256:
+        TCCR1B |= 0x04; //N prescalar S157 Manuel
+        break;
+    case 1024:
+        TCCR1B |= 0x05; //N prescalar S157 Manuel
+        break;
+        
+    default:
+        break;
+    }
+
     
 
-    OCR1A = f;
+
     return true;
 
 }

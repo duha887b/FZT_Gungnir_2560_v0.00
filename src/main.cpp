@@ -90,10 +90,11 @@ void setup(){
     enableMotor(0);
     setDir(0);
 
-    setFrequenz_Timer1(111);
+    
 
     stepper_TimerInteruptModeSetup();
-    stepper_timerModeStop();
+    setFrequenz_Timer1(562);
+    stepper_timerModeRun();
 
 }
 
