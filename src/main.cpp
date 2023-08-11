@@ -93,7 +93,7 @@ void setup(){
     
 
     stepper_TimerInteruptModeSetup();
-    setFrequenz_Timer1(562);
+    setFrequenz_Timer1(9562);
     stepper_timerModeRun();
 
 }
