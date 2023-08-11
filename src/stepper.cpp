@@ -218,5 +218,6 @@ void stepper_timerModeStop(){
 //workhorse 
 ISR(TIMER1_COMPA_vect) {
     //Serial.println(1);
+     //TCNT1 = 0x0000; //Timer/Counter 1
     step();
 }
