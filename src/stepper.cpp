@@ -1,3 +1,31 @@
+/*
+
+stepper.cpp - controle bipolar stepper motors with puls controled controlers
+Part of FZTg for Atmega2560 based controller
+
+MIT License
+
+Copyright (c) 2023 Dustin Hanusch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #include "stepper.h"
 
 const unsigned int minPulsLOW = 2.5; //us
@@ -10,18 +38,14 @@ const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3
 bool DIR = 0; // 0CW 1CCW
 bool ENA = 1; //0ON 1OF for DM556T
 
-float sPS;
-float ThalfWave;
-
 unsigned int pDIR;
 unsigned int pENA;
 unsigned int pPUL;
 
-signed int Speed;//mm/s
+int32_t Speed;//mm/s
 
 float position;
-
-
+int64_t PostionCounter; // count relative steps from zero position
 
 void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls){
     pDIR = pdir;
@@ -156,9 +180,6 @@ bool setFrequenz_Timer1(unsigned int f){
         return false;
     }
 
-    
-
-
     return true;
 
 }
@@ -180,4 +201,14 @@ ISR(TIMER1_COMPA_vect) {
     //Serial.println(1);
      //TCNT1 = 0x0000; //Timer/Counter 1
     step();
+}
+
+bool set_stepperSpeed(int speed){
+    int32_t tmp_freq;
+    Speed = speed;
+
+    speed<0 ? setDir(1) : setDir(0); // set direction 
+
+    tmp_freq  = (microsStepp / mmPerRotaion) * speed ;
+    return setFrequenz_Timer1(tmp_freq);
 }
