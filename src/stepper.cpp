@@ -2,7 +2,7 @@
 
 const unsigned int minPulsLOW = 2.5; //us
 const unsigned int minPulsHIGH = 2.5;//us
-const unsigned int maxfrquenz = 100000;//Hz
+const unsigned long int maxfrquenz = 100000;//Hz
 const unsigned int microsStepp = 400; // steps per rotation (1.8° Stpep)
 
 const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3 
@@ -52,47 +52,6 @@ void setDir(bool dir){
     DIR = dir;
     digitalWrite(pDIR,DIR);
 }
-/*
-
-void cycle(TickType_t* xLast){
-
-    TickType_t xFrequenz;
-    xFrequenz = 3;
-    //Serial.begin(115200);
-    for(;;){
-    
-    //vTaskDelayUntil(xLast,xFrequenz);
-    //Serial.println(xTaskGetTickCount());
-    delayMicroseconds(ThalfWave);
-    step();
-
-    if(!DIR){
-        position++;
-    }else{position--;}
-
-    
-    }
-}
-*/
-
-void stepPerSecond(){
-    sPS = microsStepp/mmPerRotaion * Speed;
-    ThalfWave = ((1/sPS) * 1000000) - minPulsHIGH;  
-    
-
-}
-
-void setSpeed(signed int speed){
-    Speed = speed;
-    stepPerSecond();
-    
-}
-
-float get_position(){
-    return (position/microsStepp)*mmPerRotaion;
-}
-
-
 
 //Timer 1 with intterupt for Wave genaration
 
@@ -172,6 +131,7 @@ bool setFrequenz_Timer1(unsigned int f){
 
 
     OCR1A = NTop[1]; //set tTOP value
+    TCCR1B &= 0xF8; // reset Timer source before rewriding
 
     switch (NTop[0]) // set prescalar
     {
@@ -193,7 +153,7 @@ bool setFrequenz_Timer1(unsigned int f){
         break;
         
     default:
-        break;
+        return false;
     }
 
     
