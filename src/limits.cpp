@@ -40,29 +40,32 @@ bool get_limitTop(){
 bool get_limitBottom(){
     return limit_BOTTON;
 }
-
+int i = 0;
 void ISR_TOP(){ // ISR 
-
+    i++;
     stepper_timerModeStop(); // stop Motor
     limit_TOP = 0;
+    Serial.println(i);
 
 }
 
 void ISR_BOTTOM(){ //ISR 
     stepper_timerModeStop(); //stop Motor
     limit_BOTTON = 0;
+    delay(10);
 
 }
 
 void setup_limits(){
-    pinMode(sw_TOP,INPUT_PULLUP);   //setup pins
-    pinMode(sw_BOTTOM,INPUT_PULLUP);
+    pinMode(sw_TOP,INPUT);   //setup pins
+    pinMode(sw_BOTTOM,INPUT);
 
     limit_BOTTON = digitalRead(sw_BOTTOM);
     limit_TOP = digitalRead(sw_TOP);
-    
+    Serial.begin(115200);
+    Serial.println("inidone");
 
-    attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,FALLING);      //setup pin interupts
+    attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,RISING);      //setup pin interupts
     attachInterrupt(digitalPinToInterrupt(sw_BOTTOM),ISR_BOTTOM,FALLING);
 
 

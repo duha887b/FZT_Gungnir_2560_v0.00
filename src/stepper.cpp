@@ -229,12 +229,16 @@ bool set_stepperSpeed(int speed){
 
 bool moveRelative(float distance,unsigned int speed)// in mm (direction via distance)
 {
+    
     double long tmp_positionVictory = updatePosition() + distance; // calculate new position reletive to the current position
 
     distance>0 ? set_stepperSpeed(speed) : set_stepperSpeed(-(speed)); // set speed and direction
-    stepper_timerModeRun();
+    
 
-    while(((distance>0) && (updatePosition()<=tmp_positionVictory)) || ((distance<0) && (updatePosition()>=tmp_positionVictory))){} // wait until position is reached
+    while(((distance>0) && (updatePosition()<=tmp_positionVictory)) || ((distance<0) && (updatePosition()>=tmp_positionVictory))){
+        
+        stepper_timerModeRun();
+    } 
 
     stepper_timerModeStop();
     return 1;
@@ -246,24 +250,37 @@ bool moveRelative(float distance,unsigned int speed)// in mm (direction via dist
 int homeing_speed = 30;
 bool home()// home axis and get zero ; calibrate position 
 {
-    Serial.begin(115200);
-    Serial.println("homing");
+    //Serial.begin(115200);
+    //Serial.println("homing");
     set_stepperSpeed(-(homeing_speed));
+    stepper_timerModeRun();
+    //Serial.println(get_limitBottom());
+    while(get_limitBottom()){
+        //Serial.println("l");
+    }
+    stepper_timerModeStop();
+/*
+    if(!get_limitTop()){ // failed wrong limit /TODO timout für die while schleife
+        return 0;
+        Serial.println("fail");
+    }
+ */   
+    moveRelative(3,10);
+
+  
+/*
+    set_stepperSpeed(-1);
     stepper_timerModeRun();
 
     while(get_limitBottom()){
         
     }
-    if(!get_limitTop()){ // failed wrong limit /TODO timout für die while schleife
-        return 0;
-    }
-    
-    moveRelative(3,10);
+
     Position = 0;
     PostionCounter = 0;
 
     Serial.println("done");
-
+*/
     return true;
 }
 

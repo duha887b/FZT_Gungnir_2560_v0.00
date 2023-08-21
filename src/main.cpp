@@ -50,8 +50,8 @@ void setup(){
 
     setup_limits();
 
-    //home();
-    moveRelative(3,10);
+    home();
+   //moveRelative(-3,10);
 
 }
 
