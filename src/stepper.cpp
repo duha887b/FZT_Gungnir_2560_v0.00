@@ -28,6 +28,7 @@ SOFTWARE.
 
 #include "stepper.h"
 
+
 const unsigned int minPulsLOW = 2.5; //us
 const unsigned int minPulsHIGH = 2.5;//us
 const unsigned long int maxfrquenz = 100000;//Hz
@@ -36,6 +37,9 @@ const unsigned int microsStepp = 400; // steps per rotation (1.8° Stpep)
 const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3 
 
 bool DIR = 0; // 0CW 1CCW
+#define DOWN 1
+#define UP 0
+
 bool ENA = 1; //0ON 1OF for DM556T
 
 unsigned int pDIR;
@@ -200,6 +204,10 @@ void stepper_timerModeStop(){
     TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
     
 }
+long double updatePosition(){
+    Position = (PostionCounter/microsStepp)*mmPerRotaion;
+    return Position;
+}
 
 //workhorse 
 ISR(TIMER1_COMPA_vect) {
@@ -213,33 +221,59 @@ bool set_stepperSpeed(int speed){
     int32_t tmp_freq;
     Speed = speed;
 
-    speed<0 ? setDir(1) : setDir(0); // set direction 
+    speed<0 ? setDir(DOWN) : setDir(UP); // set direction 
 
     tmp_freq  = (microsStepp / mmPerRotaion) * abs(speed) ;
     return setFrequenz_Timer1(tmp_freq);
 }
 
+bool moveRelative(float distance,unsigned int speed)// in mm (direction via distance)
+{
+    double long tmp_positionVictory = updatePosition() + distance; // calculate new position reletive to the current position
+
+    distance>0 ? set_stepperSpeed(speed) : set_stepperSpeed(-(speed)); // set speed and direction
+    stepper_timerModeRun();
+
+    while(((distance>0) && (updatePosition()<=tmp_positionVictory)) || ((distance<0) && (updatePosition()>=tmp_positionVictory))){} // wait until position is reached
+
+    stepper_timerModeStop();
+    return 1;
+
+}
+
+
 // TODO implement homing ISR(endstop)
+int homeing_speed = 30;
 bool home()// home axis and get zero ; calibrate position 
 {
-    /*while (no end)
-    motor Run 
-    */
+    Serial.begin(115200);
+    Serial.println("homing");
+    set_stepperSpeed(-(homeing_speed));
+    stepper_timerModeRun();
+
+    while(get_limitBottom()){
+        
+    }
+    if(!get_limitTop()){ // failed wrong limit /TODO timout für die while schleife
+        return 0;
+    }
+    
+    moveRelative(3,10);
     Position = 0;
     PostionCounter = 0;
+
+    Serial.println("done");
+
     return true;
 }
-long double updatePosition(){
-    Position = (PostionCounter/microsStepp)*mmPerRotaion;
-    return Position;
-}
+
 //TODO PEC limits
 bool goToPosition(float position)// in mm
 {
     enableMotor(0);
     TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
 
-    while (true)
+    while (!get_limitBottom() && !get_limitTop())//quatsch
     {
         /* limit breack; */
         break;
@@ -248,8 +282,4 @@ bool goToPosition(float position)// in mm
 
 }
 
-bool moveRelative(float distance)// in mm
-{
-    
-}
 
