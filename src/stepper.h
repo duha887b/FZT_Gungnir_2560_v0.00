@@ -31,6 +31,7 @@ SOFTWARE.
 
 
 #include <Arduino.h>
+#include "limits.h"
 
 #define MOTOR_Y_ENABLE_PIN 49
 #define MOTOR_Y_STEP_PIN 44
@@ -57,7 +58,7 @@ bool home();// home axis and get zero ; calibrate position
 
 bool goToPosition(float position);// in mm
 
-bool moveRelative(float distance);// in mm
+bool moveRelative(float distance,unsigned int speed);// in mm
 
 
 #endif

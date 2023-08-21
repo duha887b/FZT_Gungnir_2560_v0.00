@@ -35,6 +35,8 @@ SOFTWARE.
 #define sw_BOTTOM 21
 
 void setup_limits();
+bool get_limitTop();
+bool get_limitBottom();
 
 
 #endif

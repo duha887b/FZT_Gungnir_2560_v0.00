@@ -33,6 +33,14 @@ SOFTWARE.
 bool limit_TOP = 0;
 bool limit_BOTTON = 0;
 
+bool get_limitTop(){
+    return limit_TOP;
+}
+
+bool get_limitBottom(){
+    return limit_BOTTON;
+}
+
 void ISR_TOP(){ // ISR 
 
     stepper_timerModeStop(); // stop Motor
@@ -52,7 +60,7 @@ void setup_limits(){
 
     limit_BOTTON = digitalRead(sw_BOTTOM);
     limit_TOP = digitalRead(sw_TOP);
-    Serial.begin()
+    
 
     attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,FALLING);      //setup pin interupts
     attachInterrupt(digitalPinToInterrupt(sw_BOTTOM),ISR_BOTTOM,FALLING);

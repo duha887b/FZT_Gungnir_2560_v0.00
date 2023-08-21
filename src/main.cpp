@@ -50,8 +50,8 @@ void setup(){
 
     setup_limits();
 
-    set_stepperSpeed(20);
-    stepper_timerModeRun();
+    //home();
+    moveRelative(3,10);
 
 }
 
