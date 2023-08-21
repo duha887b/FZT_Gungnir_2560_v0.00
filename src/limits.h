@@ -1,6 +1,6 @@
 /*
 
-main.cpp - main loop
+limits.h - interface for limits.cpp
 Part of FZTg for Atmega2560 based controller
 
 MIT License
@@ -26,39 +26,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "pages.h"
-#include "stepper.h"
-#include "limits.h"
+#ifndef LIMITS_HH
+#define LIMITS_HH
+
+#include <Arduino.h>
+
+#define sw_TOP 20       //interrupt must be possible 
+#define sw_BOTTOM 21
+
+void setup_limits();
 
 
-
-void setup(){
-    
-    //Serial.println("Startet");
-
-    setupPages();
-    landingPage();
-    runPage();
-
-    pinSetup(MOTOR_Y_ENABLE_PIN,MOTOR_Y_DIR_PIN,MOTOR_Y_STEP_PIN);
-    enableMotor(0);
-    setDir(0);
-
-    
-
-    stepper_TimerInteruptModeSetup();
-
-    setup_limits();
-
-    set_stepperSpeed(20);
-    stepper_timerModeRun();
-
-}
-
-void loop(){
-    //main loop ....
-    startTouch();
-    
-    
-
-}
+#endif

@@ -44,8 +44,8 @@ unsigned int pPUL;
 
 int32_t Speed;//mm/s
 
-float position;
-int64_t PostionCounter; // count relative steps from zero position
+long double Position = 0;
+int64_t PostionCounter =0; // count relative steps from zero position
 
 void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls){
     pDIR = pdir;
@@ -62,9 +62,15 @@ void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls){
 }
 
 void step(){
-    digitalWrite(pPUL,HIGH);
-    delayMicroseconds(minPulsHIGH);
-    digitalWrite(pPUL,LOW);
+    if(!ENA){
+     digitalWrite(pPUL,HIGH);
+     delayMicroseconds(minPulsHIGH);
+     digitalWrite(pPUL,LOW);
+
+     DIR ? PostionCounter-- : PostionCounter++;   
+    }
+    
+    
 }
 
 void enableMotor(bool ena){
@@ -110,7 +116,7 @@ long int NTop[2]; // final descision TOP & N
 bool setFrequenz_Timer1(unsigned int f){
 
    if(f>maxfrquenz){return false;} // controller based max frequenz
-    Serial.begin(115200);
+    //Serial.begin(115200);
 
     for(int i = 0; i<(int)(sizeof(TOP)/sizeof(float));i++){  
     
@@ -118,7 +124,7 @@ bool setFrequenz_Timer1(unsigned int f){
         if (TOP[i]> 65535 ){ // check overflow on 16bit Register 
             TOP[i] = -1;
         }
-        Serial.println(TOP[i]);
+        //Serial.println(TOP[i]);
     }
 
     float tmp_1 = 1;
@@ -150,8 +156,8 @@ bool setFrequenz_Timer1(unsigned int f){
         }
         
     }
-    Serial.println(NTop[0]);
-    Serial.println(NTop[1]);
+    //Serial.println(NTop[0]);
+    //Serial.println(NTop[1]);
 
 
     OCR1A = NTop[1]; //set tTOP value
@@ -191,8 +197,7 @@ void stepper_timerModeRun(){
 }
 
 void stepper_timerModeStop(){
-    enableMotor(1);
-    TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable
+    TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
     
 }
 
@@ -201,6 +206,7 @@ ISR(TIMER1_COMPA_vect) {
     //Serial.println(1);
      //TCNT1 = 0x0000; //Timer/Counter 1
     step();
+    DIR ? PostionCounter-- : PostionCounter++ ;
 }
 
 bool set_stepperSpeed(int speed){
@@ -209,6 +215,41 @@ bool set_stepperSpeed(int speed){
 
     speed<0 ? setDir(1) : setDir(0); // set direction 
 
-    tmp_freq  = (microsStepp / mmPerRotaion) * speed ;
+    tmp_freq  = (microsStepp / mmPerRotaion) * abs(speed) ;
     return setFrequenz_Timer1(tmp_freq);
 }
+
+// TODO implement homing ISR(endstop)
+bool home()// home axis and get zero ; calibrate position 
+{
+    /*while (no end)
+    motor Run 
+    */
+    Position = 0;
+    PostionCounter = 0;
+    return true;
+}
+long double updatePosition(){
+    Position = (PostionCounter/microsStepp)*mmPerRotaion;
+    return Position;
+}
+//TODO PEC limits
+bool goToPosition(float position)// in mm
+{
+    enableMotor(0);
+    TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
+
+    while (true)
+    {
+        /* limit breack; */
+        break;
+    }
+    
+
+}
+
+bool moveRelative(float distance)// in mm
+{
+    
+}
+

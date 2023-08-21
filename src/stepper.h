@@ -32,6 +32,9 @@ SOFTWARE.
 
 #include <Arduino.h>
 
+#define MOTOR_Y_ENABLE_PIN 49
+#define MOTOR_Y_STEP_PIN 44
+#define MOTOR_Y_DIR_PIN 51
 
 void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls);
 
@@ -50,6 +53,11 @@ void stepper_timerModeStop();
 
 bool set_stepperSpeed(int speed);
 
+bool home();// home axis and get zero ; calibrate position 
+
+bool goToPosition(float position);// in mm
+
+bool moveRelative(float distance);// in mm
 
 
 #endif
