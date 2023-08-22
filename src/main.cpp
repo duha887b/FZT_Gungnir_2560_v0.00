@@ -30,6 +30,9 @@ SOFTWARE.
 #include "stepper.h"
 #include "limits.h"
 
+// TODO Incremntgeber implementieren
+// TODO Steuerung Spulenmotor
+// FIXME Kommentierung
 
 
 void setup(){
