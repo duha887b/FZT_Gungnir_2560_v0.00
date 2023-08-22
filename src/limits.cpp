@@ -65,7 +65,7 @@ void setup_limits(){
     Serial.begin(115200);
     Serial.println("inidone");
 
-    attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,RISING);      //setup pin interupts
+    attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,FALLING);      //setup pin interupts
     attachInterrupt(digitalPinToInterrupt(sw_BOTTOM),ISR_BOTTOM,FALLING);
 
 
