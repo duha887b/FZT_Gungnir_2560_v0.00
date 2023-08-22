@@ -37,8 +37,7 @@ const unsigned int microsStepp = 400; // steps per rotation (1.8° Stpep)
 const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3 
 
 bool DIR = 0; // 0CW 1CCW
-#define DOWN 1
-#define UP 0
+
 
 bool ENA = 1; //0ON 1OF for DM556T
 
@@ -46,10 +45,13 @@ unsigned int pDIR;
 unsigned int pENA;
 unsigned int pPUL;
 
+
+
+
 int32_t Speed;//mm/s
 
-long double Position = 0;
-int64_t PostionCounter =0; // count relative steps from zero position
+volatile long double Position = 0;
+volatile int64_t PostionCounter =0; // count relative steps from zero position
 
 void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls){
     pDIR = pdir;
@@ -66,6 +68,8 @@ void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls){
 }
 
 void step(){
+
+                    //Crash dedection
     if(!ENA){
      digitalWrite(pPUL,HIGH);
      delayMicroseconds(minPulsHIGH);
@@ -85,6 +89,10 @@ void enableMotor(bool ena){
 void setDir(bool dir){
     DIR = dir;
     digitalWrite(pDIR,DIR);
+}
+
+bool getDir(){
+    return DIR;
 }
 
 //Timer 1 with intterupt for Wave genaration
@@ -119,13 +127,13 @@ long int NTop[2]; // final descision TOP & N
 
 bool setFrequenz_Timer1(unsigned int f){
 
-   if(f>maxfrquenz){return false;} // controller based max frequenz
+   if(f>maxfrquenz){return false;}                           // controller based max frequenz
     //Serial.begin(115200);
 
     for(int i = 0; i<(int)(sizeof(TOP)/sizeof(float));i++){  
     
-        TOP[i] = ((float)F_CPU/((float)f*(float)N[i])-1);  // calc TOP for each combination 
-        if (TOP[i]> 65535 ){ // check overflow on 16bit Register 
+        TOP[i] = ((float)F_CPU/((float)f*(float)N[i])-1);   // calc TOP for each combination 
+        if (TOP[i]> 65535 ){                                // check overflow on 16bit Register 
             TOP[i] = -1;
         }
         //Serial.println(TOP[i]);
@@ -133,11 +141,12 @@ bool setFrequenz_Timer1(unsigned int f){
 
     float tmp_1 = 1;
     
-    for(int i = 0;i<(int)(sizeof(TOP)/sizeof(float));i++ ){ //find nearest mathing frequenz
+    for(int i = 0;i<(int)(sizeof(TOP)/sizeof(float));i++ ){ //find nearest matching frequenz
         float tmp;
         int flag = 0; //aufrunden
 
         if(TOP[i] == -1){continue;}
+
         tmp = TOP[i] - (long int)TOP[i];
         if(tmp>0.5){
             tmp = 1-tmp;
@@ -196,13 +205,15 @@ bool setFrequenz_Timer1(unsigned int f){
 
 void stepper_timerModeRun(){
     enableMotor(0);
+    
     TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
     
 }
 
 void stepper_timerModeStop(){
+   
     TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
-    
+    Serial.println("tstopmmm");
 }
 long double updatePosition(){
     Position = (PostionCounter/microsStepp)*mmPerRotaion;
@@ -231,13 +242,13 @@ bool moveRelative(float distance,unsigned int speed)// in mm (direction via dist
 {
     
     double long tmp_positionVictory = updatePosition() + distance; // calculate new position reletive to the current position
-
+    
     distance>0 ? set_stepperSpeed(speed) : set_stepperSpeed(-(speed)); // set speed and direction
     
-
+    stepper_timerModeRun();
     while(((distance>0) && (updatePosition()<=tmp_positionVictory)) || ((distance<0) && (updatePosition()>=tmp_positionVictory))){
         
-        stepper_timerModeRun();
+        
     } 
 
     stepper_timerModeStop();
@@ -247,40 +258,46 @@ bool moveRelative(float distance,unsigned int speed)// in mm (direction via dist
 
 
 // TODO implement homing ISR(endstop)
-int homeing_speed = 30;
+int homeing_speed = 20;
 bool home()// home axis and get zero ; calibrate position 
 {
-    //Serial.begin(115200);
-    //Serial.println("homing");
+    int i = 0;
+    Serial.begin(115200);
+    Serial.println("homing");
     set_stepperSpeed(-(homeing_speed));
     stepper_timerModeRun();
     //Serial.println(get_limitBottom());
-    while(get_limitBottom()){
-        //Serial.println("l");
+    for(;;){
+        //Serial.println((float)updatePosition());
+        
+        if(!get_limitBottom()){
+            break;
+        }
     }
-    stepper_timerModeStop();
+    //stepper_timerModeStop();
 /*
     if(!get_limitTop()){ // failed wrong limit /TODO timout für die while schleife
         return 0;
         Serial.println("fail");
     }
  */   
-    moveRelative(3,10);
-
+    moveRelative(3,1);
+    Serial.println("move rel point");
+   // Serial.println((float)updatePosition());
   
-/*
-    set_stepperSpeed(-1);
-    stepper_timerModeRun();
 
-    while(get_limitBottom()){
-        
-    }
+    //set_stepperSpeed(-1);
+   // stepper_timerModeRun();
+    //
+    moveRelative(-9,1); // slow down
 
     Position = 0;
     PostionCounter = 0;
 
+    set_stepperSpeed((homeing_speed));
+
     Serial.println("done");
-*/
+
     return true;
 }
 

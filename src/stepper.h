@@ -37,12 +37,17 @@ SOFTWARE.
 #define MOTOR_Y_STEP_PIN 44
 #define MOTOR_Y_DIR_PIN 51
 
+#define DOWN 1
+#define UP 0
+
 void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls);
 
 void step();
 
 void enableMotor(bool ena);
 void setDir(bool dir);
+
+bool getDir();
 
 void stepper_TimerInteruptModeSetup();
 

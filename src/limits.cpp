@@ -30,8 +30,10 @@ SOFTWARE.
 
 //TODO debounce switches 
 
-bool limit_TOP = 0;
-bool limit_BOTTON = 0;
+volatile bool limit_TOP = 1;
+volatile bool limit_BOTTON = 1;
+
+bool crashFlag = 0;
 
 bool get_limitTop(){
     return limit_TOP;
@@ -42,18 +44,32 @@ bool get_limitBottom(){
 }
 int i = 0;
 void ISR_TOP(){ // ISR 
-    i++;
-    stepper_timerModeStop(); // stop Motor
-    limit_TOP = 0;
-    Serial.println(i);
+    
+    //stepper_timerModeStop(); // stop Motor
+    limit_TOP = digitalRead(sw_TOP);
+
+    if(getDir() == UP && !limit_TOP ){            //crash detection 
+        stepper_timerModeStop();
+        crashFlag = true;
+        return;
+    }
+    
+
+    
 
 }
 
 void ISR_BOTTOM(){ //ISR 
-    stepper_timerModeStop(); //stop Motor
-    limit_BOTTON = 0;
-    delay(10);
-
+    //stepper_timerModeStop(); //stop Motor
+    limit_BOTTON = digitalRead(sw_BOTTOM);
+    //Serial.print("bootom");
+    if(getDir() == DOWN && !limit_BOTTON){            //crash detection 
+        stepper_timerModeStop();
+        //Serial.print("stop");
+        crashFlag = true;
+        return;
+    }
+    
 }
 
 void setup_limits(){
@@ -62,11 +78,11 @@ void setup_limits(){
 
     limit_BOTTON = digitalRead(sw_BOTTOM);
     limit_TOP = digitalRead(sw_TOP);
-    Serial.begin(115200);
-    Serial.println("inidone");
+    //Serial.begin(115200);
+    //Serial.println("inidone");
 
-    attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,FALLING);      //setup pin interupts
-    attachInterrupt(digitalPinToInterrupt(sw_BOTTOM),ISR_BOTTOM,FALLING);
+    attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,CHANGE);      //setup pin interupts
+    attachInterrupt(digitalPinToInterrupt(sw_BOTTOM),ISR_BOTTOM,CHANGE);
 
 
 }
