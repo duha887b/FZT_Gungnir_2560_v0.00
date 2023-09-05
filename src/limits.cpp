@@ -28,7 +28,7 @@ SOFTWARE.
 #include "limits.h"
 #include "stepper.h"
 
-//TODO debounce switches 
+//TODO debounce switches (done with hardware)
 
 volatile bool limit_TOP = 1;
 volatile bool limit_BOTTON = 1;
@@ -72,6 +72,7 @@ void ISR_BOTTOM(){ //ISR
     
 }
 
+// FIXME interrupt levels
 void setup_limits(){
     pinMode(sw_TOP,INPUT);   //setup pins
     pinMode(sw_BOTTOM,INPUT);

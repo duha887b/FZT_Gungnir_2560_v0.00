@@ -257,55 +257,46 @@ bool moveRelative(float distance,unsigned int speed)// in mm (direction via dist
 }
 
 
-// TODO implement homing ISR(endstop)
+// TODO refractor
 int homeing_speed = 20;
 bool home()// home axis and get zero ; calibrate position 
 {
-    int i = 0;
-    Serial.begin(115200);
-    Serial.println("homing");
-    set_stepperSpeed(-(homeing_speed));
+   
+    set_stepperSpeed(-(homeing_speed)); //go to bottom limit 
     stepper_timerModeRun();
-    //Serial.println(get_limitBottom());
+    
     for(;;){
-        //Serial.println((float)updatePosition());
         
         if(!get_limitBottom()){
             break;
         }
     }
-    //stepper_timerModeStop();
-/*
-    if(!get_limitTop()){ // failed wrong limit /TODO timout für die while schleife
-        return 0;
-        Serial.println("fail");
-    }
- */   
+
     moveRelative(3,1);
     Serial.println("move rel point");
-   // Serial.println((float)updatePosition());
-  
-
-    //set_stepperSpeed(-1);
-   // stepper_timerModeRun();
-    //
+   
     moveRelative(-9,1); // slow down
 
     Position = 0;
     PostionCounter = 0;
 
-    set_stepperSpeed((homeing_speed));
+    set_stepperSpeed((homeing_speed)); //go to upper limit
+    stepper_timerModeRun();
+
+    while (get_limitTop());
+    moveRelative(-3,1);
+    moveRelative(9,1);
+    
 
     Serial.println("done");
 
     return true;
 }
 
-//TODO PEC limits
+//TODO not tested 
 bool goToPosition(float position)// in mm
 {
-    enableMotor(0);
-    TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
+  
 
     while (!get_limitBottom() && !get_limitTop())//quatsch
     {
