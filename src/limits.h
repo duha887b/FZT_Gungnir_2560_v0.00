@@ -31,8 +31,8 @@ SOFTWARE.
 
 #include <Arduino.h>
 
-#define sw_TOP 20       //interrupt must be possible 
-#define sw_BOTTOM 21
+#define sw_TOP 27       //interrupt must be possible 
+#define sw_BOTTOM 28
 
 void setup_limits();
 bool get_limitTop();

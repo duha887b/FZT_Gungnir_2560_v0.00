@@ -72,7 +72,7 @@ void ISR_BOTTOM(){ //ISR
     
 }
 
-// FIXME interrupt levels
+// FIXME interrupt levels zu keinem interrupt ändern
 void setup_limits(){
     pinMode(sw_TOP,INPUT);   //setup pins
     pinMode(sw_BOTTOM,INPUT);

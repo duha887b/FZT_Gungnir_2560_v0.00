@@ -213,7 +213,7 @@ void stepper_timerModeRun(){
 void stepper_timerModeStop(){
    
     TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
-    Serial.println("tstopmmm");
+    
 }
 long double updatePosition(){
     Position = (PostionCounter/microsStepp)*mmPerRotaion;

@@ -29,15 +29,19 @@ SOFTWARE.
 #include "pages.h"
 #include "stepper.h"
 #include "limits.h"
+#include "turnpulse.h"
 
 // TODO Incremntgeber implementieren
 // TODO Steuerung Spulenmotor
 // FIXME Kommentierung
-
+int old  =0;
 
 void setup(){
+    //Serial.begin(115200);
     
     //Serial.println("Startet");
+
+    
 
     setupPages();
     landingPage();
@@ -50,18 +54,27 @@ void setup(){
     
 
     stepper_TimerInteruptModeSetup();
+    stepper_timerModeStop();
+    set_stepperSpeed(20);
 
-    setup_limits();
+    setup_turnimpuls();
+    old = get_count_t1();
+    //setup_limits();
 
-    home();
-   //moveRelative(-3,10);
+    //home();
+    //moveRelative(-3,10);
 
+    
+    
 }
 
 void loop(){
-    //main loop ....
-    startTouch();
     
+    
+    if(old != get_count_t1()){
+        old< get_count_t1() ? moveRelative(1,40):moveRelative(-1,40);
+        old = get_count_t1();
+    }
     
 
 }
