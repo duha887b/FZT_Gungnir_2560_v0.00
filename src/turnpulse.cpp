@@ -31,9 +31,17 @@ SOFTWARE.
 
 volatile int count_t1 = 0;
 volatile int count_t2 = 0;
+volatile bool lock_t1 = 0;
 
+bool get_lockT1(){
+  return lock_t1;
+}
 int get_count_t1(){
   return count_t1;
+}
+
+void reset_count_t1(){
+  count_t1 = 0;
 }
 
 void ISR_T1A(){
@@ -43,15 +51,14 @@ void ISR_T1A(){
     digitalRead(T1_B) ? count_t1++ : count_t1--;
     
     
-    Serial.println(count_t1);
+    //Serial.println(count_t1);
     //Serial.println(digitalRead(T1_Switch));
     
 }
 
 void ISR_switch_T1(){
   
-    Serial.println("press");
-    //Serial.println(digitalRead(T1_Switch));
+    lock_t1 = !lock_t1;
     
 }
 

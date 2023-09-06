@@ -30,6 +30,7 @@ SOFTWARE.
 #include "stepper.h"
 #include "limits.h"
 #include "turnpulse.h"
+#include "interface.h"
 
 // TODO Incremntgeber implementieren
 // TODO Steuerung Spulenmotor
@@ -45,7 +46,6 @@ void setup(){
 
     setupPages();
     landingPage();
-    probePage();
 
     pinSetup(MOTOR_Y_ENABLE_PIN,MOTOR_Y_DIR_PIN,MOTOR_Y_STEP_PIN);
     enableMotor(0);
@@ -69,12 +69,6 @@ void setup(){
 }
 
 void loop(){
-    
-    
-    if(old != get_count_t1()){
-        old< get_count_t1() ? moveRelative(1,40):moveRelative(-1,40);
-        old = get_count_t1();
-    }
-    
 
+    start_menu();
 }

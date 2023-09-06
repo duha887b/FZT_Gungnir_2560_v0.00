@@ -102,7 +102,9 @@ void landingPage(){
 
 
 }
-
+void draw_cursor1(char16_t c){
+ 
+}
 
 void probePage(){
     tft.drawRect(5,10,96,31,GREEN); 
@@ -122,7 +124,7 @@ void probePage(){
     tft.setCursor(10,200);
     tft.print("Z-Jog");
 
-    tft.setCursor(95,285);
+    tft.setCursor(95,55);
     tft.print("Home");
 
     tft.setCursor(10,250);

@@ -43,5 +43,7 @@ SOFTWARE.
 
 void setup_turnimpuls();
 int get_count_t1();
+void reset_count_t1();
+bool get_lockT1();
 
 #endif 
