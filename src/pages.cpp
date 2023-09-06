@@ -43,6 +43,7 @@ Adafruit_GFX_Button zero_btn, jog_btn,run_btn;
 
 int pixel_x, pixel_y;
 //Touch_getXY() updates global vars
+/*
 bool Touch_getXY(void)
 {
     TSPoint p = ts.getPoint();
@@ -58,7 +59,7 @@ bool Touch_getXY(void)
     return pressed;
 }
 
-
+*/
 
 void setupPages(){
     // Reading TFT ID:
@@ -67,21 +68,107 @@ void setupPages(){
     if (ID == 0xD3D3) ID = 0x9486; // write-only shield
     tft.begin(ID);
 
-    tft.setRotation(0);
+    tft.setRotation(1);
     tft.fillScreen(BLACK);
-    Serial.begin(9600);
-    Serial.println("PagesStart");
+    
 
 }
 
 void landingPage(){
-    tft.setCursor(80,240);
+    tft.setCursor(165,160);
     tft.setTextSize(2);
     tft.setTextColor(WHITE);
     tft.print("Gungnir_00.0");
     delay(500);
     tft.fillScreen(BLACK);
+    tft.drawLine(0,0,180,0,WHITE);
+    tft.drawLine(180,0,180,50,WHITE);
+    tft.drawLine(180,50,MAX_X,50,WHITE);
+    tft.drawLine(0,0,0,MAX_Y,WHITE);
+    tft.drawLine(MAX_X,50,MAX_X,MAX_Y,WHITE);
+    tft.drawLine(0,MAX_Y,MAX_X,MAX_Y,WHITE);
+    tft.drawLine(MAX_X/2,50,MAX_X/2,MAX_Y,WHITE);
+    //tft.drawLine(0,50,MAX_X,50,WHITE);
 
+    tft.setCursor(10,15);
+    tft.setTextSize(3);
+    tft.print("PROBE RUN");
+
+    tft.setCursor(400,15);
+    tft.setTextSize(2);
+    tft.print("v00.0");
+
+    
+
+
+}
+
+
+void probePage(){
+    tft.drawRect(5,10,96,31,GREEN); 
+    tft.drawRect(4,9,98,33,GREEN);
+
+    tft.setCursor(10,55);
+    tft.setTextSize(1);
+    tft.print("z-Achse");
+
+    tft.setCursor(10,100);
+    tft.setTextSize(2);
+    tft.print("Z-Postion");
+
+    tft.setCursor(10,150);
+    tft.print("Speed");
+    
+    tft.setCursor(10,200);
+    tft.print("Z-Jog");
+
+    tft.setCursor(95,285);
+    tft.print("Home");
+
+    tft.setCursor(10,250);
+    tft.print("Set-Zero");
+
+    tft.setCursor(150,100);
+    tft.setTextSize(2);
+    tft.print("000,00");
+
+    tft.setCursor(150,150);
+    tft.print("00,0");
+    
+    tft.setCursor(150,200);
+    tft.print("Stop");
+
+    tft.setCursor(150,250);
+    tft.print("000,00");
+
+    
+} 
+
+void probe_setPosition(char pos[10]){
+    tft.setCursor(150,100);
+    tft.setTextSize(2);
+    tft.print(pos);
+}
+
+void probe_setSpeed(char sp[10]){
+    tft.setCursor(150,150);
+    tft.setTextSize(2);
+    tft.print(sp);
+}
+
+void probe_setJog(bool jog){
+    tft.setCursor(150,200);
+    tft.setTextSize(2);
+    jog ?  tft.print("Stop") :  tft.print("Run");
+}
+
+void probe_setZero(char zero[10]){
+    tft.setCursor(150,250);
+    tft.setTextSize(2);
+    tft.print(zero);
+}
+
+/*
     tft.setCursor(230,25);
     tft.print("v0.00");
     tft.drawLine(65,0,65,64,WHITE);
@@ -97,14 +184,15 @@ void landingPage(){
 
     run_btn.initButton(&tft,161,32,63,63,BLACK,BLACK,WHITE,"Run", 2);
     run_btn.drawButton(false);
+*/
 
-}
 void req(){
     tft.fillRect(0,65,320,415,BLACK);
     tft.drawRect(0,65,320,415,WHITE);
     
 
 }
+/*
 Adafruit_GFX_Button btn_autoZero;
 void setZeroPage(){
     currentPage = zero;
@@ -115,7 +203,7 @@ void setZeroPage(){
     
     
 }
-
+/*
 Adafruit_GFX_Button btn_01, btn_1,btn_10, btn_100;
 Adafruit_GFX_Button btn_top, btn_bot, btn_zero;
 void jogPage(){
@@ -169,7 +257,7 @@ void runPage(){
     tft.setCursor(10,276);
     tft.print("Spule");
 }
-
+/*
 void startTouch(){
 
     bool down = Touch_getXY();
@@ -179,7 +267,7 @@ void startTouch(){
         Serial.println(pixel_x);
         Serial.println(pixel_y);
         delay(500);
-    }*/
+    }
     zero_btn.press(down && zero_btn.contains(pixel_x, pixel_y));
     jog_btn.press(down && jog_btn.contains(pixel_x, pixel_y));
     run_btn.press(down && run_btn.contains(pixel_x, pixel_y));
@@ -214,6 +302,7 @@ void startTouch(){
   
 
 }
+*/
 
 void vars_Step(bool DIR,int sp){
         tft.setTextSize(1);

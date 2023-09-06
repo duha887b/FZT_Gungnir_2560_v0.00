@@ -45,7 +45,7 @@ void setup(){
 
     setupPages();
     landingPage();
-    runPage();
+    probePage();
 
     pinSetup(MOTOR_Y_ENABLE_PIN,MOTOR_Y_DIR_PIN,MOTOR_Y_STEP_PIN);
     enableMotor(0);

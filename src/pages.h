@@ -46,6 +46,9 @@ SOFTWARE.
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
+#define MAX_X 479
+#define MAX_Y 319
+
 
  
 
@@ -57,6 +60,16 @@ void setZeroPage();
 void runPage();
 void startTouch();
 void vars_Step(bool DIR,int speed);
+
+void probePage();
+
+void probe_setPosition(char pos[10]);
+
+void probe_setSpeed(char sp[10]);
+
+void probe_setJog(bool jog);
+
+void probe_setZero(char zero[10]);
 
 
 #endif
