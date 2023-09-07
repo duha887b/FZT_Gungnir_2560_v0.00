@@ -44,10 +44,10 @@ void start_menu(){
         if(page == 0x1){
             
            if((get_count_t1() < 0)){
-                if(cursor_Page1 != 0x80){
+                if(cursor_Page1 != 0x20){
 
                   cursor_Page1 = cursor_Page1 << 1;
-
+                draw_cursor1(cursor_Page1);
                 Serial.println((int)cursor_Page1);  
                 }
                 reset_count_t1();
@@ -56,7 +56,7 @@ void start_menu(){
                 if(cursor_Page1 != 0x01){
                     
                 cursor_Page1 = cursor_Page1 >> 1;
-
+                draw_cursor1(cursor_Page1);
                 Serial.println((int)cursor_Page1);
                 }
                 reset_count_t1();

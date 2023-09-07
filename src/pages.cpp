@@ -102,9 +102,36 @@ void landingPage(){
 
 
 }
+
+const unsigned int hight = 22;
+const unsigned int width = 78;
+unsigned int cursor_x= 146;
+unsigned int cursor_y=126 - 50;
+
 void draw_cursor1(char16_t c){
- 
+    
+    cursor_x= 146;
+    cursor_y= 126;
+
+    
+
+    char16_t tmp = 0x04;
+    for (int i = 0; i<5 ; i++){
+        
+        tft.drawRect(cursor_x,cursor_y,width,hight,BLACK);
+        if(c <= 0x02){
+            return;}
+
+        if(tmp == c){
+            tft.drawRect(cursor_x,cursor_y,width,hight,CYAN);
+            Serial.println((int)tmp);
+        }
+
+        tmp = tmp <<1;
+        cursor_y += 50;
+    }
 }
+
 
 void probePage(){
     tft.drawRect(5,10,96,31,GREEN); 
@@ -114,33 +141,33 @@ void probePage(){
     tft.setTextSize(1);
     tft.print("z-Achse");
 
-    tft.setCursor(10,100);
     tft.setTextSize(2);
+
+    tft.setCursor(10,80);
     tft.print("Z-Postion");
 
-    tft.setCursor(10,150);
+    tft.setCursor(10,130);
     tft.print("Speed");
     
-    tft.setCursor(10,200);
+    tft.setCursor(10,180);
     tft.print("Z-Jog");
 
-    tft.setCursor(95,55);
-    tft.print("Home");
-
-    tft.setCursor(10,250);
+    tft.setCursor(10,230);
     tft.print("Set-Zero");
 
-    tft.setCursor(150,100);
-    tft.setTextSize(2);
+    tft.setCursor(150,280);
+    tft.print("Home");
+
+    tft.setCursor(150,80);
     tft.print("000,00");
 
-    tft.setCursor(150,150);
+    tft.setCursor(150,130);
     tft.print("00,0");
     
-    tft.setCursor(150,200);
+    tft.setCursor(150,180);
     tft.print("Stop");
 
-    tft.setCursor(150,250);
+    tft.setCursor(150,230);
     tft.print("000,00");
 
     
