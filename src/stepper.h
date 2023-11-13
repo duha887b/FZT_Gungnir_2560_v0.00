@@ -37,6 +37,10 @@ SOFTWARE.
 #define MOTOR_Y_STEP_PIN 44
 #define MOTOR_Y_DIR_PIN 51
 
+#define MOTOR_S_ENABLE_PIN 30
+#define MOTOR_S_STEP_PIN 31
+#define MOTOR_S_DIR_PIN 32
+
 #define DOWN 1
 #define UP 0
 
