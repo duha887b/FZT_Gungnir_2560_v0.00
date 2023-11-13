@@ -32,6 +32,7 @@ SOFTWARE.
 #include <Arduino.h>
 #include "pages.h"
 #include "turnpulse.h"
+#include "stepper.h"
 
 void start_menu();
 

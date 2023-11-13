@@ -32,7 +32,33 @@ char16_t cursor_Page1;
 char16_t cursor_Page2;
 
 char page;
+char str[100];
 
+void draw_speed();
+void draw_jog(){
+  probe_setJog(true);
+  while(get_lockT1()){
+    if(get_count_t1()<0){
+      moveRelative(-3,10);
+      reset_count_t1();
+      probe_setPosition(updatePosition());
+      
+      
+    }
+
+    if(get_count_t1()>0){
+      moveRelative(3,10);
+      reset_count_t1();
+      probe_setPosition(updatePosition());
+      
+    }
+
+    
+  }
+  probe_setJog(false);
+}
+void draw_setZero();
+void draw_home();
 
 void start_menu(){
 
@@ -42,11 +68,50 @@ void start_menu(){
     
     while(true){
         if(page == 0x1){
+
+          if(get_lockT1()){
+
+            
+            while (get_lockT1())
+            {
+              switch (cursor_Page1)
+              {
+              case 0x01:
+                  //page PROBE
+                  break;
+              case 0x02:
+                  //page RUN
+                  break;
+              case 0x04:
+                  //draw_speed();
+                  break;
+
+              case 0x08:
+                  draw_jog();
+                  break;
+
+              case 0x10:
+                  //draw_setZero();
+                  break;
+
+              case 0x20:
+                  //draw_home();
+                  break;
+              
+              default:
+                break;
+
+              }
+            }
+
+            reset_count_t1();
+            
+          }
             
            if((get_count_t1() < 0)){
                 if(cursor_Page1 != 0x20){
 
-                  cursor_Page1 = cursor_Page1 << 1;
+                cursor_Page1 = cursor_Page1 << 1;
                 draw_cursor1(cursor_Page1);
                 Serial.println((int)cursor_Page1);  
                 }
@@ -70,3 +135,4 @@ void start_menu(){
     
 
 }
+

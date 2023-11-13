@@ -63,7 +63,7 @@ void vars_Step(bool DIR,int speed);
 
 void probePage();
 
-void probe_setPosition(char pos[10]);
+void probe_setPosition(double pos);
 
 void probe_setSpeed(char sp[10]);
 

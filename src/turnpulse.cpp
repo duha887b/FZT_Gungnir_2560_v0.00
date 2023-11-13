@@ -31,7 +31,7 @@ SOFTWARE.
 
 volatile int count_t1 = 0;
 volatile int count_t2 = 0;
-volatile bool lock_t1 = 0;
+volatile bool lock_t1 = 1;
 
 bool get_lockT1(){
   return lock_t1;
@@ -59,6 +59,7 @@ void ISR_T1A(){
 void ISR_switch_T1(){
   
     lock_t1 = !lock_t1;
+    Serial.println(lock_t1);
     
 }
 
@@ -93,8 +94,6 @@ void setup_turnimpuls(){
 
   count_t1 = 0;
   count_t2 = 0;
-
-  moveRelative(3,10);
 
   attachInterrupt(digitalPinToInterrupt(T1_A),ISR_T1A,RISING);
   attachInterrupt(digitalPinToInterrupt(T1_Switch),ISR_switch_T1,FALLING);

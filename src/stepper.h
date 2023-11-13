@@ -65,5 +65,7 @@ bool goToPosition(float position);// in mm
 
 bool moveRelative(float distance,unsigned int speed);// in mm
 
+double updatePosition();
+
 
 #endif

@@ -32,10 +32,9 @@ SOFTWARE.
 #include "turnpulse.h"
 #include "interface.h"
 
-// TODO Incremntgeber implementieren
 // TODO Steuerung Spulenmotor
 // FIXME Kommentierung
-int old  =0;
+
 
 void setup(){
     //Serial.begin(115200);
@@ -51,21 +50,11 @@ void setup(){
     enableMotor(0);
     setDir(0);
 
-    
-
     stepper_TimerInteruptModeSetup();
     stepper_timerModeStop();
-    set_stepperSpeed(20);
 
     setup_turnimpuls();
-    old = get_count_t1();
-    //setup_limits();
 
-    //home();
-    //moveRelative(-3,10);
-
-    
-    
 }
 
 void loop(){

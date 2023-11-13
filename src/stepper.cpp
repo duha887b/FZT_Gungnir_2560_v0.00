@@ -215,7 +215,7 @@ void stepper_timerModeStop(){
     TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
     
 }
-long double updatePosition(){
+double updatePosition(){
     Position = (PostionCounter/microsStepp)*mmPerRotaion;
     return Position;
 }
@@ -226,6 +226,7 @@ ISR(TIMER1_COMPA_vect) {
      //TCNT1 = 0x0000; //Timer/Counter 1
     step();
     DIR ? PostionCounter-- : PostionCounter++ ;
+    
 }
 
 bool set_stepperSpeed(int speed){
@@ -247,11 +248,13 @@ bool moveRelative(float distance,unsigned int speed)// in mm (direction via dist
     
     stepper_timerModeRun();
     while(((distance>0) && (updatePosition()<=tmp_positionVictory)) || ((distance<0) && (updatePosition()>=tmp_positionVictory))){
-        
+
         
     } 
-
+        
     stepper_timerModeStop();
+
+   
     return 1;
 
 }
