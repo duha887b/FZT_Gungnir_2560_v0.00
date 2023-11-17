@@ -33,18 +33,20 @@ SOFTWARE.
 #include <Arduino.h>
 #include "limits.h"
 
-#define MOTOR_Y_ENABLE_PIN 49
-#define MOTOR_Y_STEP_PIN 44
-#define MOTOR_Y_DIR_PIN 51
+#define MOTOR_S_ENABLE_PIN 49
+#define MOTOR_S_STEP_PIN 44
+#define MOTOR_S_DIR_PIN 51
+#define MOTOR_S_MICROSTEPPING 400
 
-#define MOTOR_S_ENABLE_PIN 30
-#define MOTOR_S_STEP_PIN 31
-#define MOTOR_S_DIR_PIN 32
+#define MOTOR_Y_ENABLE_PIN 30
+#define MOTOR_Y_STEP_PIN 31
+#define MOTOR_Y_DIR_PIN 32
+#define MOTOR_Y_MICROSTEPPING 200
 
 #define DOWN 1
 #define UP 0
 
-void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls);
+void pinSetup();
 
 void step();
 

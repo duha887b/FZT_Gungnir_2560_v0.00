@@ -32,20 +32,12 @@ SOFTWARE.
 const unsigned int minPulsLOW = 2.5; //us
 const unsigned int minPulsHIGH = 2.5;//us
 const unsigned long int maxfrquenz = 100000;//Hz
-const unsigned int microsStepp = 400; // steps per rotation (1.8° Stpep)
 
 const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3 
 
 bool DIR = 0; // 0CW 1CCW
 
-
 bool ENA = 1; //0ON 1OF for DM556T
-
-unsigned int pDIR;
-unsigned int pENA;
-unsigned int pPUL;
-
-
 
 
 int32_t Speed;//mm/s
@@ -53,42 +45,48 @@ int32_t Speed;//mm/s
 volatile long double Position = 0;
 volatile int64_t PostionCounter =0; // count relative steps from zero position
 
-void pinSetup(unsigned int pena, unsigned int pdir,unsigned int ppuls){
-    pDIR = pdir;
-    pENA = pena;
-    pPUL = ppuls;
-    pinMode(pENA,OUTPUT);
-    pinMode(pDIR,OUTPUT);
-    pinMode(pPUL,OUTPUT);
+void pinSetup(){
 
-    digitalWrite(pENA,ENA);
-    digitalWrite(pDIR,DIR);
-    digitalWrite(pPUL,LOW);
+    pinMode(MOTOR_Y_DIR_PIN,OUTPUT);
+    pinMode(MOTOR_Y_ENABLE_PIN,OUTPUT);
+    pinMode(MOTOR_Y_STEP_PIN,OUTPUT);
+
+    pinMode(MOTOR_S_DIR_PIN,OUTPUT);
+    pinMode(MOTOR_S_ENABLE_PIN,OUTPUT);
+    pinMode(MOTOR_S_STEP_PIN,OUTPUT);
+
+    digitalWrite(MOTOR_Y_DIR_PIN,0);
+    digitalWrite(MOTOR_Y_ENABLE_PIN,1);
+    digitalWrite(MOTOR_Y_STEP_PIN,0);
+
+    digitalWrite(MOTOR_S_DIR_PIN,0);
+    digitalWrite(MOTOR_S_ENABLE_PIN,0);
+    digitalWrite(MOTOR_S_STEP_PIN,0);
+
 
 }
 
-void step(){
+void step(int step_pin){
 
                     //Crash dedection
-    if(!ENA){
-     digitalWrite(pPUL,HIGH);
-     delayMicroseconds(minPulsHIGH);
-     digitalWrite(pPUL,LOW);
 
-     DIR ? PostionCounter-- : PostionCounter++;   
-    }
+        digitalWrite(step_pin,HIGH);
+        delayMicroseconds(minPulsHIGH);
+        digitalWrite(step_pin,LOW);
+    
+    
     
     
 }
 
 void enableMotor(bool ena){
     ENA = ena;
-    digitalWrite(pENA,ENA);
+    digitalWrite(MOTOR_Y_ENABLE_PIN,ENA);
 }
 
 void setDir(bool dir){
     DIR = dir;
-    digitalWrite(pDIR,DIR);
+    digitalWrite(MOTOR_S_DIR_PIN,DIR);
 }
 
 bool getDir(){
@@ -216,7 +214,7 @@ void stepper_timerModeStop(){
     
 }
 double updatePosition(){
-    Position = (PostionCounter/microsStepp)*mmPerRotaion;
+    Position = (PostionCounter/MOTOR_Y_MICROSTEPPING)*mmPerRotaion;
     return Position;
 }
 
@@ -224,7 +222,8 @@ double updatePosition(){
 ISR(TIMER1_COMPA_vect) {
     //Serial.println(1);
      //TCNT1 = 0x0000; //Timer/Counter 1
-    step();
+    step(MOTOR_Y_STEP_PIN);
+    step(MOTOR_S_STEP_PIN);
     DIR ? PostionCounter-- : PostionCounter++ ;
     
 }
@@ -235,7 +234,7 @@ bool set_stepperSpeed(int speed){
 
     speed<0 ? setDir(DOWN) : setDir(UP); // set direction 
 
-    tmp_freq  = (microsStepp / mmPerRotaion) * abs(speed) ;
+    tmp_freq  = (MOTOR_Y_MICROSTEPPING / mmPerRotaion) * abs(speed) ;
     return setFrequenz_Timer1(tmp_freq);
 }
 
