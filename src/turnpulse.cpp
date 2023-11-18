@@ -44,7 +44,7 @@ unsigned long lastInterruptTime2= 0; // T1 switch
 unsigned long lastInterruptTime3 = 0; // T2
 unsigned long lastInterruptTime4 = 0; //T2 switch
 
-int debounce = 20; // Entprellzeit in ms
+int debounce = 100; // Entprellzeit in ms
 
 bool get_lockT1(){
   return lock_t1;
@@ -73,6 +73,9 @@ void ISR_T1A(){
 
     if(millis() - lastInterruptTime1 > debounce){
      digitalRead(T1_B) ? count_t1++ : count_t1--; 
+     lastInterruptTime1 = millis();
+
+     Serial.println(count_t1);
     }
 
 }
@@ -81,6 +84,9 @@ void ISR_switch_T1(){
 
     if(millis() - lastInterruptTime2 > debounce){
     lock_t1 = !lock_t1;
+    lastInterruptTime2 = millis();
+
+    Serial.println(lock_t1);
     }
 
     
@@ -90,14 +96,21 @@ void ISR_T2A(){
 
     if(millis() - lastInterruptTime3 > debounce){
     digitalRead(T2_B) ? count_t2++ : count_t2--;
+    lastInterruptTime3 = millis();
+
+    Serial.println(count_t2);
     }
+    
 
 }
 
 void ISR_switch_T2(){
 
   if(millis() - lastInterruptTime4 > debounce){
-  lock_t1 = !lock_t1;
+  lock_t2 = !lock_t2;
+  lastInterruptTime4 = millis();
+
+  Serial.println(lock_t2);
   }
 }
 
