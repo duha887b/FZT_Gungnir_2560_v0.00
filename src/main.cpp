@@ -37,25 +37,21 @@ SOFTWARE.
 
 
 void setup(){
-    //Serial.begin(115200);
-    
-    //Serial.println("Startet");
+    Serial.begin(115200);
+    Serial.println("Startet");
 
    
-
+    setup_limits();
     setupPages();
     landingPage();
     probePage();
-
-    pinSetup();
-
-
-
-
     setup_turnimpuls();
+
+    reset_count_t1();
+    reset_count_t2();
     
 
-
+}
 
 void loop(){
 }
