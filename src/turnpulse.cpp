@@ -32,6 +32,19 @@ SOFTWARE.
 volatile int count_t1 = 0;
 volatile int count_t2 = 0;
 volatile bool lock_t1 = 1;
+volatile bool lock_t2 = 1;
+
+bool interrupt_lock1 = 0; // T1
+bool interrupt_lock2 = 0; // T1 switch
+bool interrupt_lock3 = 0; // T2
+bool interrupt_lock4 = 0; // T2 switch
+
+unsigned long lastInterruptTime1 = 0; // T1
+unsigned long lastInterruptTime2= 0; // T1 switch
+unsigned long lastInterruptTime3 = 0; // T2
+unsigned long lastInterruptTime4 = 0; //T2 switch
+
+int debounce = 20; // Entprellzeit in ms
 
 bool get_lockT1(){
   return lock_t1;
@@ -44,40 +57,48 @@ void reset_count_t1(){
   count_t1 = 0;
 }
 
+bool get_lockT2(){
+  return lock_t2;
+}
+int get_count_t2(){
+  return count_t2;
+}
+
+void reset_count_t2(){
+  count_t2 = 0;
+}
+
+
 void ISR_T1A(){
 
-  
+    if(millis() - lastInterruptTime1 > debounce){
+     digitalRead(T1_B) ? count_t1++ : count_t1--; 
+    }
 
-    digitalRead(T1_B) ? count_t1++ : count_t1--;
-    
-    
-    //Serial.println(count_t1);
-    //Serial.println(digitalRead(T1_Switch));
-    
 }
 
 void ISR_switch_T1(){
-  
+
+    if(millis() - lastInterruptTime2 > debounce){
     lock_t1 = !lock_t1;
-    Serial.println(lock_t1);
+    }
+
     
 }
 
 void ISR_T2A(){
 
+    if(millis() - lastInterruptTime3 > debounce){
+    digitalRead(T2_B) ? count_t2++ : count_t2--;
+    }
 
-
-    digitalRead(T1_B) ? count_t1++ : count_t1--;
-    //Serial.println(count_t1);
-    //Serial.println(digitalRead(T1_Switch));
-    
 }
 
 void ISR_switch_T2(){
-  
-    //Serial.println("press");
-    //Serial.println(digitalRead(T1_Switch));
-    
+
+  if(millis() - lastInterruptTime4 > debounce){
+  lock_t1 = !lock_t1;
+  }
 }
 
 void setup_turnimpuls(){
@@ -88,9 +109,6 @@ void setup_turnimpuls(){
   pinMode (T2_A, INPUT_PULLUP);
   pinMode (T2_B, INPUT_PULLUP);
   pinMode (T2_Switch, INPUT_PULLUP);
-
-  Serial.begin(115200);
-  Serial.println("Start");
 
   count_t1 = 0;
   count_t2 = 0;

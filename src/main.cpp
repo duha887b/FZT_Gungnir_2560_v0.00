@@ -41,52 +41,23 @@ void setup(){
     
     //Serial.println("Startet");
 
-   /*
+   
 
     setupPages();
     landingPage();
+    probePage();
 
-    pinSetup(MOTOR_Y_ENABLE_PIN,MOTOR_Y_DIR_PIN,MOTOR_Y_STEP_PIN);
-    enableMotor(0);
-    setDir(0);
+    pinSetup();
 
-    stepper_TimerInteruptModeSetup();
-    stepper_timerModeStop();
+
+
 
     setup_turnimpuls();
-*/
-
-    //pinSetup(MOTOR_Y_ENABLE_PIN,MOTOR_Y_DIR_PIN,MOTOR_Y_STEP_PIN);
-    pinSetup();
-    enableMotor(0);
-    setDir(0);
-
-    stepper_TimerInteruptModeSetup();
-    stepper_timerModeStop();
-
-    
     
 
-    Serial.begin(115200);
-}
+
 
 void loop(){
-    long int tmp = millis();
-    stepper_timerModeRun();
-    set_stepperSpeed(1);
-    Serial.println("START");
-    int i = 1;
-    while (1)
-    {
-        if(millis()-tmp>1000){
-            set_stepperSpeed(i);
-            Serial.println(i);
-            tmp = millis();
-            i++;
-        }
-    }
-    
-   
-   }
+}
 
 

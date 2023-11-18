@@ -145,7 +145,7 @@ void probePage(){
     tft.setTextSize(2);
 
     tft.setCursor(10,80);
-    tft.print("Z-Postion");
+    tft.print("Z-Position");
 
     tft.setCursor(10,130);
     tft.print("Speed");
@@ -164,12 +164,56 @@ void probePage(){
 
     tft.setCursor(150,130);
     tft.print("00,0");
-    
+
     tft.setCursor(150,180);
     tft.print("Stop");
 
     tft.setCursor(150,230);
     tft.print("000,00");
+
+
+
+
+    tft.setCursor((MAX_X/2)+10,55);
+    tft.setTextSize(1);
+    tft.print("Spool");
+
+    tft.setTextSize(2);
+
+    tft.setCursor((MAX_X/2)+10,80);
+    tft.print("Length");
+
+    tft.setCursor((MAX_X/2)+10,130);
+    tft.print("Speed");
+
+    tft.setCursor((MAX_X/2)+10,180);
+    tft.print("Diameter");
+
+    tft.setCursor((MAX_X/2)+150,180);
+    tft.print("000,00");
+
+    
+    tft.setCursor((MAX_X/2)+10,280);
+    tft.print("S-Jog");
+
+    tft.setCursor((MAX_X/2)+10,230);
+    tft.print("Spinn");
+
+    tft.setCursor((MAX_X/2)+150,80);
+    tft.print("000,00");
+
+    tft.setCursor((MAX_X/2)+150,130);
+    tft.print("00,0");
+    
+    tft.setCursor((MAX_X/2)+150,280);
+    tft.print("Stop");
+
+    tft.setCursor((MAX_X/2)+150,230);
+    tft.print("Stop");
+
+    
+
+
 
     
 } 

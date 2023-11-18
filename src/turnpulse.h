@@ -46,4 +46,8 @@ int get_count_t1();
 void reset_count_t1();
 bool get_lockT1();
 
+int get_count_t2();
+void reset_count_t2();
+bool get_lockT2();
+
 #endif 
