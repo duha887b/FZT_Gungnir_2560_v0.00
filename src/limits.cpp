@@ -33,58 +33,18 @@ SOFTWARE.
 volatile bool limit_TOP = 1;
 volatile bool limit_BOTTON = 1;
 
-bool crashFlag = 0;
-
 bool get_limitTop(){
-    return limit_TOP;
+    return digitalRead(sw_TOP);
 }
 
 bool get_limitBottom(){
-    return limit_BOTTON;
-}
-int i = 0;
-void ISR_TOP(){ // ISR 
-    
-    //stepper_timerModeStop(); // stop Motor
-    limit_TOP = digitalRead(sw_TOP);
-
-    if(getDir() == UP && !limit_TOP ){            //crash detection 
-        stepper_timerModeStop();
-        crashFlag = true;
-        return;
-    }
-    
-
-    
-
-}
-
-void ISR_BOTTOM(){ //ISR 
-    //stepper_timerModeStop(); //stop Motor
-    limit_BOTTON = digitalRead(sw_BOTTOM);
-    //Serial.print("bootom");
-    if(getDir() == DOWN && !limit_BOTTON){            //crash detection 
-        stepper_timerModeStop();
-        //Serial.print("stop");
-        crashFlag = true;
-        return;
-    }
-    
+    return digitalRead(sw_BOTTOM);;
 }
 
 // FIXME interrupt levels zu keinem interrupt ändern
 void setup_limits(){
-    pinMode(sw_TOP,INPUT);   //setup pins
-    pinMode(sw_BOTTOM,INPUT);
-
-    limit_BOTTON = digitalRead(sw_BOTTOM);
-    limit_TOP = digitalRead(sw_TOP);
-    //Serial.begin(115200);
-    //Serial.println("inidone");
-
-    attachInterrupt(digitalPinToInterrupt(sw_TOP),ISR_TOP,CHANGE);      //setup pin interupts
-    attachInterrupt(digitalPinToInterrupt(sw_BOTTOM),ISR_BOTTOM,CHANGE);
-
+    pinMode(sw_TOP,INPUT_PULLUP);   //setup pins
+    pinMode(sw_BOTTOM,INPUT_PULLUP);
 
 }
 
