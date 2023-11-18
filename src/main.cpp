@@ -31,24 +31,36 @@ SOFTWARE.
 #include "limits.h"
 #include "turnpulse.h"
 #include "interface.h"
+#include "timer_controle.h"
 
 // TODO Steuerung Spulenmotor
 // FIXME Kommentierung
 
 
 void setup(){
+
+    
+
     Serial.begin(115200);
     Serial.println("Startet");
 
-   
+    setup_timer1();
+    setupt_timer2();
+    setup_timer3();
+
+
     setup_limits();
     setupPages();
     landingPage();
-    probePage();
     setup_turnimpuls();
 
     reset_count_t1();
     reset_count_t2();
+
+
+    start_menu();
+    
+    sei(); // globale interrupt freigabe; 
     
 
 }

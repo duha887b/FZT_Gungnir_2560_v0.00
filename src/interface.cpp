@@ -62,10 +62,13 @@ void draw_home();
 
 void start_menu(){
 
+
+
+  
     probePage();
     page = 0x01;
     cursor_Page1 = 0x01;
-    
+    /*
     while(true){
         if(page == 0x1){
 
@@ -131,8 +134,78 @@ void start_menu(){
         }
 
     }
-
+*/
     
 
+}
+
+void refresh_interface(){
+
+    
+    
+        if(page == 0x1){
+
+          if(get_lockT1()){
+
+            
+            while (get_lockT1())
+            {
+              switch (cursor_Page1)
+              {
+              case 0x01:
+                  //page PROBE
+                  break;
+              case 0x02:
+                  //page RUN
+                  break;
+              case 0x04:
+                  //draw_speed();
+                  break;
+
+              case 0x08:
+                  draw_jog();
+                  break;
+
+              case 0x10:
+                  //draw_setZero();
+                  break;
+
+              case 0x20:
+                  //draw_home();
+                  break;
+              
+              default:
+                break;
+
+              }
+            }
+
+            reset_count_t1();
+            
+          }
+            
+           if((get_count_t1() < 0)){
+                if(cursor_Page1 != 0x20){
+
+                cursor_Page1 = cursor_Page1 << 1;
+                draw_cursor1(cursor_Page1);
+                Serial.println((int)cursor_Page1);  
+                }
+                reset_count_t1();
+           }
+           if((get_count_t1()> 0 )){
+                if(cursor_Page1 != 0x01){
+                    
+                cursor_Page1 = cursor_Page1 >> 1;
+                draw_cursor1(cursor_Page1);
+                Serial.println((int)cursor_Page1);
+                }
+                reset_count_t1();
+           }
+           
+            
+        }
+
+    
 }
 

@@ -35,6 +35,7 @@ SOFTWARE.
 #include "stepper.h"
 
 void start_menu();
+void refresh_interface();
 
 
 

@@ -96,7 +96,7 @@ bool getDir(){
 //Timer 1 with intterupt for Wave genaration
 
 void stepper_TimerInteruptModeSetup(){
-    //Timer 1 16bit (overflow at 65536)
+   /* //Timer 1 16bit (overflow at 65536)
 
   noInterrupts(); //disable intterupts global
   // Clear registers
@@ -115,7 +115,7 @@ void stepper_TimerInteruptModeSetup(){
   TCCR1B |= (1 << CS11); //N prescalar S157 Manuel
   
   interrupts();
-
+*/
 
 }
 
@@ -124,7 +124,7 @@ int N[5] = {1,8,64,256,1024}; //Prescalar
 long int NTop[2]; // final descision TOP & N
 
 bool setFrequenz_Timer1(unsigned int f){
-
+/*
    if(f>maxfrquenz){return false;}                           // controller based max frequenz
     //Serial.begin(115200);
 
@@ -198,19 +198,19 @@ bool setFrequenz_Timer1(unsigned int f){
     }
 
     return true;
-
+*/
 }
 
 void stepper_timerModeRun(){
     enableMotor(0);
     
-    TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
+   // TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
     
 }
 
 void stepper_timerModeStop(){
    
-    TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
+    //TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
     
 }
 double updatePosition(){
@@ -218,7 +218,8 @@ double updatePosition(){
     return Position;
 }
 
-//workhorse 
+
+/*//workhorse 
 ISR(TIMER1_COMPA_vect) {
     //Serial.println(1);
      //TCNT1 = 0x0000; //Timer/Counter 1
@@ -226,7 +227,7 @@ ISR(TIMER1_COMPA_vect) {
     step(MOTOR_S_STEP_PIN);
     DIR ? PostionCounter-- : PostionCounter++ ;
     
-}
+}*/
 
 bool set_stepperSpeed(int speed){
     int32_t tmp_freq;
@@ -302,7 +303,7 @@ bool goToPosition(float position)// in mm
 
     while (!get_limitBottom() && !get_limitTop())//quatsch
     {
-        /* limit breack; */
+        
         break;
     }
     
