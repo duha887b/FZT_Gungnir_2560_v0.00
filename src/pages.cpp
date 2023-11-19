@@ -118,18 +118,24 @@ void draw_cursor(int side, char16_t newPosition){      //curosr animatin
         cursor_x= 146;
         cursor_y= 126;
 
+        
         if(newPosition == currentPosition_0){return;}
 
-        if(newPosition == 4){
-            tft.drawRect(6,cursor_y+((newPosition-1)*50),width,hight,WHITE);
-        }else{
-            tft.drawRect(cursor_x,cursor_y+(newPosition*50),width,hight,WHITE);
-        }
-
         if(currentPosition_0 == 4){
-            tft.drawRect(6,cursor_y+((currentPosition_0-1)*50),width,hight,BLACK);
+            cursor_x = 6;
+            tft.drawRect(cursor_x,cursor_y+((currentPosition_0-1)*50),width,hight,BLACK);
+            cursor_x= 146;
         }else{
-            tft.drawRect(6,cursor_y+(currentPosition_0*50),width,hight,BLACK);
+        tft.drawRect(cursor_x,cursor_y+(currentPosition_0*50),width,hight,BLACK);
+        }
+        
+
+        if(newPosition == 4){
+            cursor_x = 6;
+            tft.drawRect(cursor_x,cursor_y+((newPosition-1)*50),width,hight,CYAN);
+            cursor_x= 146;
+        }else{
+        tft.drawRect(cursor_x,cursor_y+(newPosition*50),width,hight,CYAN);
         }
 
         currentPosition_0 = newPosition;
@@ -137,7 +143,7 @@ void draw_cursor(int side, char16_t newPosition){      //curosr animatin
         break;
     
     
-    case 1:
+    case 1:                                     // tested fine
         cursor_x= 146 + MAX_X/2;
         cursor_y= 126;
 
@@ -152,7 +158,7 @@ void draw_cursor(int side, char16_t newPosition){      //curosr animatin
         if(newPosition == 3){
             cursor_x = 6+MAX_X/2;
         }
-        tft.drawRect(cursor_x,cursor_y+(newPosition*50),width,hight,WHITE);
+        tft.drawRect(cursor_x,cursor_y+(newPosition*50),width,hight,CYAN);
 
         currentPosition_1 = newPosition;
 

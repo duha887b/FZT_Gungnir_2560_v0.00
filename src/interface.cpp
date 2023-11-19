@@ -35,6 +35,9 @@ char str[100];
 int positionL;
 int positionC;
 
+bool refreschValues_L;
+bool refreschValues_S;
+
 void draw_speed();
 void draw_jog(){
 }
@@ -53,38 +56,125 @@ void start_menu(){
 
 void refresh_interface(){
 
-  positionL = get_count_t1();
-  positionC = get_count_t2();
 
-  if(positionL < 0){
+
+  switch (get_lockT1())
+  {
+  case 0:
+    positionL = get_count_t1();
+
+    if(positionL < 0){
     positionL = 0;
     reset_count_t1(0);
+    }
+
+    if(positionL > 4){
+    positionL = 4;
+    reset_count_t1(4);
+    }
+
+    draw_cursor(0,positionL);
+    
+  
+
+  
+    break;
+  
+  case 1:
+    value_shift_L(positionL);
+    break;
   }
+
+  switch (get_lockT2())
+  {
+  case 0:
+
+    positionC = get_count_t2();
 
   if(positionC < 0){
     positionC = 0;
     reset_count_t2(0);
   }
 
-  if(positionL > 4){
-    positionL = 4;
-    reset_count_t1(4);
-  }
-
+  
   if(positionC > 3){
     positionC = 3;
     reset_count_t2(3);
   }
-
-  draw_cursor(0,positionL);
   draw_cursor(1,positionC);
+  
 
-  Serial.print(positionL  );
-  Serial.print(  positionC);
-  Serial.println("");
+    break;
+  
+  case 1:
+    value_shift_S(positionC);
+    break;
+  }
+
+  
+ 
+
+  //Serial.print(get_lockT1()  );
+  //Serial.print(  get_lockT2());
+  //Serial.println("");
+
+  if(refreschValues_L){
+    refreschValues_L = false;
+    reset_count_t1(positionL);
+  }
+
+  if(refreschValues_S){
+    refreschValues_S = false;
+    reset_count_t2(positionC);
+
+  }
     
     
 
     
+}
+
+void value_shift_L(int pos){
+  switch (pos)
+  {
+    case 0:
+      break;
+
+    case 1:
+      break;
+
+    case 2:
+      break;
+
+    case 3:
+      break;
+
+    case 4: 
+      break;
+
+    default:
+      break;
+    }
+
+}
+
+void value_shift_S(int pos){
+  switch (pos)
+  {
+    case 0:
+      break;
+
+    case 1:
+      break;
+
+    case 3:
+      break;
+
+    default:
+      break;
+
+
+  }
+  
 }
 

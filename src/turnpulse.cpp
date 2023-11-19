@@ -40,12 +40,12 @@ bool interrupt_lock3 = 0; // T2
 bool interrupt_lock4 = 0; // T2 switch
 
 unsigned long lastInterruptTime1 = 0; // T1
-unsigned long lastInterruptTime2= 0; // T1 switch
+unsigned long lastInterruptTime2= 1; // T1 switch
 unsigned long lastInterruptTime3 = 0; // T2
-unsigned long lastInterruptTime4 = 0; //T2 switch
+unsigned long lastInterruptTime4 = 1; //T2 switch
 
 unsigned int debounce = 100; // Entprellzeit in ms
-unsigned int debounce_t = 120; // Entprellzeit in ms
+unsigned int debounce_t = 50; // Entprellzeit in ms
 
 bool get_lockT1(){
   return lock_t1;
@@ -73,7 +73,7 @@ void reset_count_t2(int o){
 void ISR_T1A(){
 
     if(millis() - lastInterruptTime1 > debounce_t){
-     digitalRead(T1_B) ? count_t1++ : count_t1--; 
+     digitalRead(T1_B) ? count_t1-- : count_t1++; 
      lastInterruptTime1 = millis();
 
      //Serial.println(count_t1);
@@ -87,7 +87,7 @@ void ISR_switch_T1(){
     lock_t1 = !lock_t1;
     lastInterruptTime2 = millis();
 
-    Serial.println(lock_t1);
+    //Serial.println(lock_t1);
     }
 
     
@@ -96,7 +96,7 @@ void ISR_switch_T1(){
 void ISR_T2A(){
 
     if(millis() - lastInterruptTime3 > debounce_t){
-    digitalRead(T2_B) ? count_t2++ : count_t2--;
+    digitalRead(T2_B) ? count_t2-- : count_t2++;
     lastInterruptTime3 = millis();
 
     //Serial.println(count_t2);
@@ -111,7 +111,7 @@ void ISR_switch_T2(){
   lock_t2 = !lock_t2;
   lastInterruptTime4 = millis();
 
-  Serial.println(lock_t2);
+  //Serial.println(lock_t2);
   }
 }
 
@@ -127,11 +127,16 @@ void setup_turnimpuls(){
   count_t1 = 0;
   count_t2 = 0;
 
+ 
+
   attachInterrupt(digitalPinToInterrupt(T1_A),ISR_T1A,RISING);
   attachInterrupt(digitalPinToInterrupt(T1_Switch),ISR_switch_T1,FALLING);
 
   attachInterrupt(digitalPinToInterrupt(T2_A),ISR_T2A,RISING);
   attachInterrupt(digitalPinToInterrupt(T2_Switch),ISR_switch_T2,FALLING);
+
+  lock_t1 = 0;
+  lock_t2 = 0;
 
 
 }
