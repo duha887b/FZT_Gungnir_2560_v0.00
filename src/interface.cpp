@@ -28,34 +28,15 @@ SOFTWARE.
 
 #include "interface.h"
 
-char16_t cursor_Page1;
-char16_t cursor_Page2;
+
 
 char page;
 char str[100];
+int positionL;
+int positionC;
 
 void draw_speed();
 void draw_jog(){
-  probe_setJog(true);
-  while(get_lockT1()){
-    if(get_count_t1()<0){
-      moveRelative(-3,10);
-      reset_count_t1();
-      probe_setPosition(updatePosition());
-      
-      
-    }
-
-    if(get_count_t1()>0){
-      moveRelative(3,10);
-      reset_count_t1();
-      probe_setPosition(updatePosition());
-      
-    }
-
-    
-  }
-  probe_setJog(false);
 }
 void draw_setZero();
 void draw_home();
@@ -66,145 +47,43 @@ void start_menu(){
 
   
     probePage();
-    page = 0x01;
-    cursor_Page1 = 0x01;
-    /*
-    while(true){
-        if(page == 0x1){
 
-          if(get_lockT1()){
-
-            
-            while (get_lockT1())
-            {
-              switch (cursor_Page1)
-              {
-              case 0x01:
-                  //page PROBE
-                  break;
-              case 0x02:
-                  //page RUN
-                  break;
-              case 0x04:
-                  //draw_speed();
-                  break;
-
-              case 0x08:
-                  draw_jog();
-                  break;
-
-              case 0x10:
-                  //draw_setZero();
-                  break;
-
-              case 0x20:
-                  //draw_home();
-                  break;
-              
-              default:
-                break;
-
-              }
-            }
-
-            reset_count_t1();
-            
-          }
-            
-           if((get_count_t1() < 0)){
-                if(cursor_Page1 != 0x20){
-
-                cursor_Page1 = cursor_Page1 << 1;
-                draw_cursor1(cursor_Page1);
-                Serial.println((int)cursor_Page1);  
-                }
-                reset_count_t1();
-           }
-           if((get_count_t1()> 0 )){
-                if(cursor_Page1 != 0x01){
-                    
-                cursor_Page1 = cursor_Page1 >> 1;
-                draw_cursor1(cursor_Page1);
-                Serial.println((int)cursor_Page1);
-                }
-                reset_count_t1();
-           }
-           
-            
-        }
-
-    }
-*/
-    
-
+   
 }
 
 void refresh_interface(){
 
+  positionL = get_count_t1();
+  positionC = get_count_t2();
+
+  if(positionL < 0){
+    positionL = 0;
+    reset_count_t1(0);
+  }
+
+  if(positionC < 0){
+    positionC = 0;
+    reset_count_t2(0);
+  }
+
+  if(positionL > 4){
+    positionL = 4;
+    reset_count_t1(4);
+  }
+
+  if(positionC > 3){
+    positionC = 3;
+    reset_count_t2(3);
+  }
+
+  draw_cursor(0,positionL);
+  draw_cursor(1,positionC);
+
+  Serial.print(positionL  );
+  Serial.print(  positionC);
+  Serial.println("");
     
     
-        if(page == 0x1){
-
-          if(get_lockT1()){
-
-            
-            while (get_lockT1())
-            {
-              switch (cursor_Page1)
-              {
-              case 0x01:
-                  //page PROBE
-                  break;
-              case 0x02:
-                  //page RUN
-                  break;
-              case 0x04:
-                  //draw_speed();
-                  break;
-
-              case 0x08:
-                  draw_jog();
-                  break;
-
-              case 0x10:
-                  //draw_setZero();
-                  break;
-
-              case 0x20:
-                  //draw_home();
-                  break;
-              
-              default:
-                break;
-
-              }
-            }
-
-            reset_count_t1();
-            
-          }
-            
-           if((get_count_t1() < 0)){
-                if(cursor_Page1 != 0x20){
-
-                cursor_Page1 = cursor_Page1 << 1;
-                draw_cursor1(cursor_Page1);
-                Serial.println((int)cursor_Page1);  
-                }
-                reset_count_t1();
-           }
-           if((get_count_t1()> 0 )){
-                if(cursor_Page1 != 0x01){
-                    
-                cursor_Page1 = cursor_Page1 >> 1;
-                draw_cursor1(cursor_Page1);
-                Serial.println((int)cursor_Page1);
-                }
-                reset_count_t1();
-           }
-           
-            
-        }
 
     
 }

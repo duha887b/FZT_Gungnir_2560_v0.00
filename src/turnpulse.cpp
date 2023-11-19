@@ -54,8 +54,8 @@ int get_count_t1(){
   return count_t1;
 }
 
-void reset_count_t1(){
-  count_t1 = 0;
+void reset_count_t1(int o){
+  count_t1 = o;
 }
 
 bool get_lockT2(){
@@ -65,8 +65,8 @@ int get_count_t2(){
   return count_t2;
 }
 
-void reset_count_t2(){
-  count_t2 = 0;
+void reset_count_t2(int o){
+  count_t2 = o;
 }
 
 

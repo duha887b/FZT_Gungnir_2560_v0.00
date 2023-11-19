@@ -54,13 +54,14 @@ void setup(){
     landingPage();
     setup_turnimpuls();
 
-    reset_count_t1();
-    reset_count_t2();
+    reset_count_t1(0);
+    reset_count_t2(0);
 
 
     start_menu();
     
     sei(); // globale interrupt freigabe; 
+    start_timer1(); //interrupt freigabe
     
 
 }

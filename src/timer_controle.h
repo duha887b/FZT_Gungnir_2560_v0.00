@@ -35,4 +35,6 @@ void setup_timer1();
 void setupt_timer2();
 void setup_timer3();
 
+void start_timer1();
+
 #endif

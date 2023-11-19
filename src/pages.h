@@ -71,6 +71,6 @@ void probe_setJog(bool jog);
 
 void probe_setZero(char zero[10]);
 
-void draw_cursor1(char16_t c);
+void draw_cursor(int side, char16_t newPosition);
 
 #endif

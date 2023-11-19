@@ -43,9 +43,12 @@ uint16_t compareValTimer1 = F_CPU/(2*64*interruptfrequenzy_Timer1) - 1; // Presc
   TCCR1B = (1 << WGM12) | (1 << CS11) | (1 << CS10);    // CTC-Modus, Prescalar auf 64
   OCR1A = compareValTimer1;                             // Setzt den Compare-Wert
 
-  TIMSK1 |= (1 << OCIE1A);                              // Interrupt freigeben 
+  TIMSK1 |= (0 << OCIE1A);                              // Interrupt sperren 
 
   interrupts();
+}
+void start_timer1(){
+  TIMSK1 |= (1 << OCIE1A);  
 }
 
 //ISR Timer 1 

@@ -44,11 +44,11 @@ SOFTWARE.
 
 void setup_turnimpuls();
 int get_count_t1();
-void reset_count_t1();
+void reset_count_t1(int o);
 bool get_lockT1();
 
 int get_count_t2();
-void reset_count_t2();
+void reset_count_t2(int o);
 bool get_lockT2();
 
 #endif 

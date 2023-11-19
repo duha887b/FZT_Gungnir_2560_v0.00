@@ -92,7 +92,7 @@ void landingPage(){
 
     tft.setCursor(10,15);
     tft.setTextSize(3);
-    tft.print("PROBE RUN");
+    tft.print("SETUP RUN");
 
     tft.setCursor(400,15);
     tft.setTextSize(2);
@@ -106,31 +106,60 @@ void landingPage(){
 const unsigned int hight = 22;
 const unsigned int width = 78;
 unsigned int cursor_x= 146;
-unsigned int cursor_y=126 - 50;
+unsigned int cursor_y=126;
+unsigned int currentPosition_0 = 0;
+unsigned int currentPosition_1 = 0;
 
-//TODO refrector so it can be used for all pages and sides 
-void draw_cursor1(char16_t c){      //curosr animatin 
-    
-    cursor_x= 146;
-    cursor_y= 126;
+void draw_cursor(int side, char16_t newPosition){      //curosr animatin 
+                                            // side Lin(side = 0) --> 0-4 ; side Spool(side = 1) 0-3
+    switch (side)
+    {
+    case 0:
+        cursor_x= 146;
+        cursor_y= 126;
 
-    
+        if(newPosition == currentPosition_0){return;}
 
-    char16_t tmp = 0x04;
-    for (int i = 0; i<5 ; i++){
-
-        tft.drawRect(cursor_x,cursor_y,width,hight,BLACK);
-        if(c <= 0x02){
-            return;}
-
-        if(tmp == c){
-            tft.drawRect(cursor_x,cursor_y,width,hight,CYAN);
-            Serial.println((int)tmp);
+        if(newPosition == 4){
+            tft.drawRect(6,cursor_y+((newPosition-1)*50),width,hight,WHITE);
+        }else{
+            tft.drawRect(cursor_x,cursor_y+(newPosition*50),width,hight,WHITE);
         }
 
-        tmp = tmp <<1;
-        cursor_y += 50;
+        if(currentPosition_0 == 4){
+            tft.drawRect(6,cursor_y+((currentPosition_0-1)*50),width,hight,BLACK);
+        }else{
+            tft.drawRect(6,cursor_y+(currentPosition_0*50),width,hight,BLACK);
+        }
+
+        currentPosition_0 = newPosition;
+
+        break;
+    
+    
+    case 1:
+        cursor_x= 146 + MAX_X/2;
+        cursor_y= 126;
+
+        if(newPosition == currentPosition_1){return;}
+
+        if(currentPosition_1 == 3){
+            cursor_x = 6+MAX_X/2;
+        }
+        tft.drawRect(cursor_x,cursor_y+(currentPosition_1*50),width,hight,BLACK);
+        cursor_x= 146 + MAX_X/2;
+
+        if(newPosition == 3){
+            cursor_x = 6+MAX_X/2;
+        }
+        tft.drawRect(cursor_x,cursor_y+(newPosition*50),width,hight,WHITE);
+
+        currentPosition_1 = newPosition;
+
+    default:
+        break;
     }
+    
 }
 
 
@@ -150,10 +179,10 @@ void probePage(){
     tft.setCursor(10,130);
     tft.print("Speed");
     
-    tft.setCursor(10,180);
+    tft.setCursor(10,230);
     tft.print("Z-Jog");
 
-    tft.setCursor(10,230);
+    tft.setCursor(10,180);
     tft.print("Set-Zero");
 
     tft.setCursor(150,280);
@@ -165,10 +194,10 @@ void probePage(){
     tft.setCursor(150,130);
     tft.print("00,0");
 
-    tft.setCursor(150,180);
+    tft.setCursor(150,230);
     tft.print("Stop");
 
-    tft.setCursor(150,230);
+    tft.setCursor(150,180);
     tft.print("000,00");
 
 
@@ -193,11 +222,8 @@ void probePage(){
     tft.print("000,00");
 
     
-    tft.setCursor((MAX_X/2)+10,280);
-    tft.print("S-Jog");
-
     tft.setCursor((MAX_X/2)+10,230);
-    tft.print("Spinn");
+    tft.print("S-Jog");
 
     tft.setCursor((MAX_X/2)+150,80);
     tft.print("000,00");
@@ -205,11 +231,18 @@ void probePage(){
     tft.setCursor((MAX_X/2)+150,130);
     tft.print("00,0");
     
-    tft.setCursor((MAX_X/2)+150,280);
-    tft.print("Stop");
-
     tft.setCursor((MAX_X/2)+150,230);
     tft.print("Stop");
+
+
+    tft.setTextColor(RED);
+    tft.setTextSize(2);
+
+    tft.setCursor((MAX_X/2)+10,280);
+    tft.print("START");
+
+    tft.setCursor(10,280);
+    tft.print("START");
 
     
 
