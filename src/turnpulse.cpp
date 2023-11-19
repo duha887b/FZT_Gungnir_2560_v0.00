@@ -44,7 +44,7 @@ unsigned long lastInterruptTime2= 1; // T1 switch
 unsigned long lastInterruptTime3 = 0; // T2
 unsigned long lastInterruptTime4 = 1; //T2 switch
 
-unsigned int debounce = 100; // Entprellzeit in ms
+unsigned int debounce = 150; // Entprellzeit in ms
 unsigned int debounce_t = 50; // Entprellzeit in ms
 
 bool get_lockT1(){

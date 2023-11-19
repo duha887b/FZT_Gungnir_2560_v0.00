@@ -38,29 +38,20 @@ int positionC;
 bool refreschValues_L;
 bool refreschValues_S;
 
+bool block_lock1;
+bool block_lock2;
+
+// Array von Funktionspointern
+    
+
 void draw_speed();
 void draw_jog(){
 }
 void draw_setZero();
 void draw_home();
 
-void start_menu(){
 
-
-
-  
-    probePage();
-
-   
-}
-
-void refresh_interface(){
-
-
-
-  switch (get_lockT1())
-  {
-  case 0:
+void main_Lin(){
     positionL = get_count_t1();
 
     if(positionL < 0){
@@ -74,22 +65,34 @@ void refresh_interface(){
     }
 
     draw_cursor(0,positionL);
-    
-  
+}
 
-  
-    break;
-  
-  case 1:
-    value_shift_L(positionL);
-    break;
-  }
+void subLin_speed(){
 
-  switch (get_lockT2())
-  {
-  case 0:
+}
 
-    positionC = get_count_t2();
+void subLin_Zero(){
+
+}
+
+void subLin_Jog(){
+
+}
+
+void subLin_home(){
+
+}
+
+void subLin_START(){
+
+}
+
+void (*funktionsListe_LIN[])(void) = {main_Lin, subLin_speed, subLin_Zero,subLin_Jog,subLin_home,subLin_START};
+
+
+ void main_spool(){
+
+  positionC = get_count_t2();
 
   if(positionC < 0){
     positionC = 0;
@@ -102,79 +105,56 @@ void refresh_interface(){
     reset_count_t2(3);
   }
   draw_cursor(1,positionC);
-  
-
-    break;
-  
-  case 1:
-    value_shift_S(positionC);
-    break;
-  }
-
-  
- 
-
-  //Serial.print(get_lockT1()  );
-  //Serial.print(  get_lockT2());
-  //Serial.println("");
-
-  if(refreschValues_L){
-    refreschValues_L = false;
-    reset_count_t1(positionL);
-  }
-
-  if(refreschValues_S){
-    refreschValues_S = false;
-    reset_count_t2(positionC);
-
-  }
-    
-    
-
-    
 }
 
-void value_shift_L(int pos){
-  switch (pos)
-  {
-    case 0:
-      break;
-
-    case 1:
-      break;
-
-    case 2:
-      break;
-
-    case 3:
-      break;
-
-    case 4: 
-      break;
-
-    default:
-      break;
-    }
+void subSpool_speed(){
 
 }
 
-void value_shift_S(int pos){
-  switch (pos)
-  {
-    case 0:
-      break;
+void subSpool_diameter(){
 
-    case 1:
-      break;
+}
 
-    case 3:
-      break;
+void subSpool_Jog(){
 
-    default:
-      break;
+}
 
+void subSpool_START(){
 
-  }
+}
+
+void (*funktionsListe_SPOOL[])(void) = {main_spool, subSpool_speed, subSpool_diameter,subSpool_Jog,subSpool_START};
+
+void start_menu(){
+
+  probePage();
+  block_lock1 = false;
+  block_lock2 = false;
+  positionC = 0;
+  positionL = 0;
+
+}
+
+void refresh_interface(){
+
+if(get_lockT1() || block_lock1){
+  funktionsListe_LIN[positionL+1]();
+  block_lock1 = true;
+}else{
+  funktionsListe_LIN[0]();
+}
+
+if(get_lockT2() || block_lock2){
+  funktionsListe_SPOOL[positionC+1]();
+  block_lock2 = true;
+}else{
+  funktionsListe_SPOOL[0]();
+}
+
+//Serial.print(get_lockT1() && !block_lock1);
+//Serial.print(get_lockT2() && !block_lock2);
+//Serial.println("");
   
 }
+
 

@@ -30,7 +30,7 @@ SOFTWARE.
 #include "timer_controle.h"
 
 //TODO frquenzberechnung kerrekt machen und Vorteiler setzten lassen 
-const int interruptfrequenzy_Timer1 = 20; //Hz
+const int interruptfrequenzy_Timer1 = 15; //Hz
 
 void setup_timer1(){
 
