@@ -80,7 +80,7 @@ void subLin_speed(){
 
   if(linSpeed<0){
     linSpeed=0;
-    reset_count_t2(positionL);
+    reset_count_t1(positionL);
   }
 
   probe_setSpeed(linSpeed);

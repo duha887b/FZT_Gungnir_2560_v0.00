@@ -72,12 +72,18 @@ void reset_count_t2(int o){
 
 void ISR_T1A(){
 
+    
+    // FIXME (PIN_22_PORT & PIN_22_PIN) ? count_t1-- : count_t1++; läuft so wie es ist scheiße, gilt auch für T2
+    
+
     if(millis() - lastInterruptTime1 > debounce_t){
-     digitalRead(T1_B) ? count_t1-- : count_t1++; 
+     (digitalRead(T1_B)) ? count_t1-- : count_t1++; 
      lastInterruptTime1 = millis();
 
      //Serial.println(count_t1);
     }
+
+    
 
 }
 

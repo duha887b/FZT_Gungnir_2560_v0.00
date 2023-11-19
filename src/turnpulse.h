@@ -33,6 +33,10 @@ SOFTWARE.
 #define T1_B 22
 #define T1_Switch 19
 
+#define PIN_22_PORT PIND
+#define PIN_22_PIN (1<<PIND0)
+
+
 #define T2_A 20
 #define T2_B 24
 #define T2_Switch 21
