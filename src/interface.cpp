@@ -38,8 +38,12 @@ int positionC;
 bool refreschValues_L;
 bool refreschValues_S;
 
-bool block_lock1;
-bool block_lock2;
+volatile bool block_lock1;
+volatile bool block_lock2;
+
+float linSpeed = 0;
+float spoolSpeed = 0;
+
 
 // Array von Funktionspointern
     
@@ -68,6 +72,28 @@ void main_Lin(){
 }
 
 void subLin_speed(){
+  block_lock1 = true;
+  
+
+  //TODO auf bestehenden wert zurückgreifen
+  linSpeed = ((get_count_t1()- positionL )*0.5);
+
+  if(linSpeed<0){
+    linSpeed=0;
+    reset_count_t2(positionL);
+  }
+
+  probe_setSpeed(linSpeed);
+
+
+
+  //TODO wert auf motor schreiben 
+  if(!get_lockT1()){
+    
+    //set speed hard
+    block_lock1 = false;
+    reset_count_t1(positionL);
+  }
 
 }
 
@@ -108,7 +134,26 @@ void (*funktionsListe_LIN[])(void) = {main_Lin, subLin_speed, subLin_Zero,subLin
 }
 
 void subSpool_speed(){
+   block_lock2 = true;
+  
 
+  //TODO auf bestehenden wert zurückgreifen
+  spoolSpeed = ((get_count_t2()- positionC )*1);
+  if(spoolSpeed<0){
+    spoolSpeed=0;
+    reset_count_t2(positionC);
+  }
+  spool_setSpeed(spoolSpeed);
+
+
+
+  //TODO wert auf motor schreiben 
+  if(!get_lockT2()){
+    
+    //set speed hard
+    block_lock2 = false;
+    reset_count_t2(positionC);
+  }
 }
 
 void subSpool_diameter(){
@@ -139,14 +184,14 @@ void refresh_interface(){
 
 if(get_lockT1() || block_lock1){
   funktionsListe_LIN[positionL+1]();
-  block_lock1 = true;
+  
 }else{
   funktionsListe_LIN[0]();
 }
 
 if(get_lockT2() || block_lock2){
   funktionsListe_SPOOL[positionC+1]();
-  block_lock2 = true;
+  
 }else{
   funktionsListe_SPOOL[0]();
 }

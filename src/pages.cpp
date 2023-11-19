@@ -250,6 +250,8 @@ void probePage(){
     tft.setCursor(10,280);
     tft.print("START");
 
+    tft.setTextColor(WHITE);
+
     
 
 
@@ -269,8 +271,22 @@ void probe_setPosition(double pos){
     tft.print(pos,2);
 }
 
-void probe_setSpeed(char sp[10]){
-    tft.setCursor(150,150);
+void probe_setSpeed(float sp){
+
+    
+    tft.fillRect(150,130,70,17,BLACK);
+
+    tft.setCursor(150,130);
+    tft.setTextSize(2);
+    tft.print(sp);
+}
+
+void spool_setSpeed(float sp){
+
+    
+    tft.fillRect(150+MAX_X/2,130,70,17,BLACK);
+
+    tft.setCursor(150+MAX_X/2,130);
     tft.setTextSize(2);
     tft.print(sp);
 }

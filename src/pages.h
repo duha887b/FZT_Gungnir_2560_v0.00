@@ -65,7 +65,9 @@ void probePage();
 
 void probe_setPosition(double pos);
 
-void probe_setSpeed(char sp[10]);
+void probe_setSpeed(float sp);
+
+void spool_setSpeed(float sp);
 
 void probe_setJog(bool jog);
 
