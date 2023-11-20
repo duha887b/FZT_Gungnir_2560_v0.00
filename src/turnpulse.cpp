@@ -47,6 +47,13 @@ unsigned long lastInterruptTime4 = 1; //T2 switch
 unsigned int debounce = 150; // Entprellzeit in ms
 unsigned int debounce_t = 50; // Entprellzeit in ms
 
+int T1_A_b = 0;
+int T1_B_b = 0;
+int T2_A_b = 0;
+int T2_B_b = 0;
+
+
+
 bool get_lockT1(){
   return lock_t1;
 }
@@ -61,6 +68,14 @@ void reset_count_t1(int o){
 bool get_lockT2(){
   return lock_t2;
 }
+void set_lockT2(bool v){
+  lock_t2 = v;
+}
+
+void set_lockT1(bool v){
+  lock_t1 = v;
+}
+
 int get_count_t2(){
   return count_t2;
 }
@@ -69,23 +84,23 @@ void reset_count_t2(int o){
   count_t2 = o;
 }
 
-
+/*
 void ISR_T1A(){
 
     
     // FIXME (PIN_22_PORT & PIN_22_PIN) ? count_t1-- : count_t1++; läuft so wie es ist scheiße, gilt auch für T2
     
 
-    if(millis() - lastInterruptTime1 > debounce_t){
+    //if(millis() - lastInterruptTime1 > debounce_t){
      (digitalRead(T1_B)) ? count_t1-- : count_t1++; 
      lastInterruptTime1 = millis();
 
      //Serial.println(count_t1);
-    }
+    //}
 
     
 
-}
+}*/
 
 void ISR_switch_T1(){
 
@@ -98,7 +113,7 @@ void ISR_switch_T1(){
 
     
 }
-
+/*
 void ISR_T2A(){
 
     if(millis() - lastInterruptTime3 > debounce_t){
@@ -109,7 +124,7 @@ void ISR_T2A(){
     }
     
 
-}
+}*/
 
 void ISR_switch_T2(){
 
@@ -133,17 +148,70 @@ void setup_turnimpuls(){
   count_t1 = 0;
   count_t2 = 0;
 
+  T1_A_b = digitalRead(T1_A);
+  T1_B_b = digitalRead(T1_B);
+
+  T2_A_b = digitalRead(T2_A);
+  T2_B_b = digitalRead(T2_B);
+
+
  
 
-  attachInterrupt(digitalPinToInterrupt(T1_A),ISR_T1A,RISING);
+  //attachInterrupt(digitalPinToInterrupt(T1_A),ISR_T1A,CHANGE);
   attachInterrupt(digitalPinToInterrupt(T1_Switch),ISR_switch_T1,FALLING);
 
-  attachInterrupt(digitalPinToInterrupt(T2_A),ISR_T2A,RISING);
+  //attachInterrupt(digitalPinToInterrupt(T2_A),ISR_T2A,RISING);
   attachInterrupt(digitalPinToInterrupt(T2_Switch),ISR_switch_T2,FALLING);
 
   lock_t1 = 0;
   lock_t2 = 0;
 
+
+}
+
+void update_turnpuls1(){
+    int tmp1 = digitalRead(T1_A);
+    int tmp2 = digitalRead(T1_B);
+
+    if(tmp1 == tmp2){
+      T1_A_b = tmp1;
+      T1_B_b = tmp2;
+      return;
+    }
+
+    if((tmp1 == T1_A_b) && ( tmp2 == T1_B_b)){
+      return;
+    }
+
+    (tmp1 == 1 && tmp2 == 0) ? count_t1-- : count_t1 ++;
+
+    T1_A_b = tmp1;
+    T1_B_b = tmp2;
+
+ 
+  
+
+
+}
+
+void update_turnpuls2(){
+  int tmp1 = digitalRead(T2_A);
+  int tmp2 = digitalRead(T2_B);
+
+    if(tmp1 == tmp2){
+      T2_A_b = tmp1;
+      T2_B_b = tmp2;
+      return;
+    }
+
+    if((tmp1 == T2_A_b) && ( tmp2 == T2_B_b)){
+      return;
+    }
+
+    (tmp1 == 1 && tmp2 == 0) ? count_t2-- : count_t2 ++;
+
+    T2_A_b = tmp1;
+    T2_B_b = tmp2;
 
 }
 

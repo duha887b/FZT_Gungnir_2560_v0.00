@@ -54,5 +54,11 @@ bool get_lockT1();
 int get_count_t2();
 void reset_count_t2(int o);
 bool get_lockT2();
+void update_turnpuls1();
+void update_turnpuls2();
+
+void set_lockT1(bool v);
+void set_lockT2(bool v);
+
 
 #endif 

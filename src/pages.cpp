@@ -291,6 +291,13 @@ void spool_setSpeed(float sp){
     tft.print(sp);
 }
 
+void spool_setDiameter(float dia){
+    tft.fillRect(150+MAX_X/2,180,70,17,BLACK);
+
+    tft.setCursor(150+MAX_X/2,180);
+    tft.setTextSize(2);
+    tft.print(dia);
+}
 void probe_setJog(bool jog){
     
     tft.setTextSize(2);

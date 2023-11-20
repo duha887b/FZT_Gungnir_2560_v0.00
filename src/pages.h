@@ -75,4 +75,6 @@ void probe_setZero(char zero[10]);
 
 void draw_cursor(int side, char16_t newPosition);
 
+void spool_setDiameter(float dia);
+
 #endif

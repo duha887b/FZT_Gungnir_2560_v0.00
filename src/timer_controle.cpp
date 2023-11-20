@@ -30,13 +30,13 @@ SOFTWARE.
 #include "timer_controle.h"
 
 //TODO frquenzberechnung kerrekt machen und Vorteiler setzten lassen 
-const int interruptfrequenzy_Timer1 = 15; //Hz
+const int interruptfrequenzy_Timer1 = 35; //Hz
 
 void setup_timer1(){
 
 noInterrupts();
     
-uint16_t compareValTimer1 = F_CPU/(2*64*interruptfrequenzy_Timer1) - 1; // Prescalar 64 muss gestzt werden 
+uint16_t compareValTimer1 = F_CPU/(64*interruptfrequenzy_Timer1) - 1; // Prescalar 64 muss gestzt werden 
 
 // Timer 1 Register config
   TCCR1A = 0;                                           // Setzt die Timer-Steuerregister A auf 0 (normale Operation)
@@ -53,6 +53,8 @@ void start_timer1(){
 
 //ISR Timer 1 
 ISR(TIMER1_COMPA_vect) { 
+  update_turnpuls1();
+  update_turnpuls2();
   refresh_interface();
   //Serial.println("timer1");
 }

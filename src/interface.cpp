@@ -43,17 +43,11 @@ volatile bool block_lock2;
 
 float linSpeed = 0;
 float spoolSpeed = 0;
+float spoolDiameter = 100;
 
 
 // Array von Funktionspointern
     
-
-void draw_speed();
-void draw_jog(){
-}
-void draw_setZero();
-void draw_home();
-
 
 void main_Lin(){
     positionL = get_count_t1();
@@ -157,6 +151,16 @@ void subSpool_speed(){
 }
 
 void subSpool_diameter(){
+  block_lock2 = true;
+
+  spoolDiameter = ((get_count_t2()-positionC)*5);
+  spool_setDiameter(spoolDiameter);
+  
+
+  if(!get_lockT2()){
+    block_lock2 = false;
+    reset_count_t2(positionC);
+  }
 
 }
 
@@ -177,6 +181,10 @@ void start_menu(){
   block_lock2 = false;
   positionC = 0;
   positionL = 0;
+
+  spool_setDiameter(spoolDiameter);
+
+  
 
 }
 
