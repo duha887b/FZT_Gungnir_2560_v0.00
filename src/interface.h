@@ -33,6 +33,7 @@ SOFTWARE.
 #include "pages.h"
 #include "turnpulse.h"
 #include "stepper.h"
+#include "timer_controle.h"
 
 void start_menu();
 void refresh_interface();

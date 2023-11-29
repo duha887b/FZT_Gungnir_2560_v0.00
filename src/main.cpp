@@ -61,7 +61,7 @@ void setup(){
     start_menu();
     
     sei(); // globale interrupt freigabe; 
-    start_timer1(); //interrupt freigabe
+    start_timer1(true); //interrupt freigabe
     
 
 }

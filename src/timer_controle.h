@@ -31,10 +31,20 @@ SOFTWARE.
 
 #include <Arduino.h>
 #include "interface.h"
+
+#define MAX_F 100000 //Hz
+
+long * setupt_timerValuesFrequenz(unsigned int f);
 void setup_timer1();
 void setupt_timer2();
 void setup_timer3();
 
-void start_timer1();
+void start_timer1(bool c);
+
+void start_timer2(bool c);
+void start_timer3(bool c);
+
+void set_timer2(unsigned int f);
+void set_timer3(unsigned int f);
 
 #endif

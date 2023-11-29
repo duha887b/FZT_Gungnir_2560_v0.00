@@ -119,9 +119,9 @@ void stepper_TimerInteruptModeSetup(){
 
 }
 
-float TOP[5]; //TOP S157 Manuel
-int N[5] = {1,8,64,256,1024}; //Prescalar
-long int NTop[2]; // final descision TOP & N
+//float TOP[5]; //TOP S157 Manuel
+//int N[5] = {1,8,64,256,1024}; //Prescalar
+//long int NTop[2]; // final descision TOP & N
 
 bool setFrequenz_Timer1(unsigned int f){
 /*
