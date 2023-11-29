@@ -31,19 +31,22 @@ SOFTWARE.
 
 const unsigned int minPulsLOW = 2.5; //us
 const unsigned int minPulsHIGH = 2.5;//us
-const unsigned long int maxfrquenz = 100000;//Hz
 
-const unsigned int mmPerRotaion = 3;//mm pro umdrehung des Motors 1:3 
+bool DIR_Y = 0; // 0CW 1CCW
+bool ENA_Y = 1; //0ON 1OF for DM556T
 
-bool DIR = 0; // 0CW 1CCW
+bool DIR_S = 0; // 0CW 1CCW
+bool ENA_S = 1; //0ON 1OF for DM556T
 
-bool ENA = 1; //0ON 1OF for DM556T
+int32_t Speed_Y;//mm/s
+int32_t Speed_S;//mm/s
 
 
-int32_t Speed;//mm/s
+volatile long double Position_Y = 0;
+volatile int64_t PostionCounter_Y =0; // count relative steps from zero position
 
-volatile long double Position = 0;
-volatile int64_t PostionCounter =0; // count relative steps from zero position
+volatile long double Position_S = 0;
+volatile int64_t PostionCounter_S =0;
 
 void pinSetup(){
 
@@ -68,166 +71,67 @@ void pinSetup(){
 
 void step(int step_pin){
 
-                    //Crash dedection
-
         digitalWrite(step_pin,HIGH);
         delayMicroseconds(minPulsHIGH);
         digitalWrite(step_pin,LOW);
     
     
-    
-    
+     
 }
 
-void enableMotor(bool ena){
-    ENA = ena;
-    digitalWrite(MOTOR_Y_ENABLE_PIN,ENA);
+//getter setter ENA/DIR
+
+bool get_ENA_Y(){
+    return ENA_Y;
+}
+bool get_ENA_S(){
+    return ENA_S;
+}
+bool get_DIR_Y(){
+    return DIR_Y;
+}
+bool get_DIR_S(){
+    return DIR_S;
 }
 
-void setDir(bool dir){
-    DIR = dir;
-    digitalWrite(MOTOR_S_DIR_PIN,DIR);
+void set_ENA_Y(bool s){
+    ENA_Y = s;
+    digitalWrite(MOTOR_Y_ENABLE_PIN,s);
+}
+void set_ENA_S(bool s){
+    ENA_S = s;
+    digitalWrite(MOTOR_S_ENABLE_PIN,s);
+}
+void set_DIR_Y(bool s){
+    DIR_Y = s;
+    digitalWrite(MOTOR_Y_DIR_PIN,s);
+}
+void set_DIR_S(bool s){
+    DIR_S = s;
+    digitalWrite(MOTOR_S_DIR_PIN,s);
 }
 
-bool getDir(){
-    return DIR;
+void updatePosition(){
+    Position_Y = (PostionCounter_Y/MOTOR_Y_MICROSTEPPING)*MOTOR_Y_MM_PER_U;
+    Position_S = (PostionCounter_S/MOTOR_S_MICROSTEPPING)*MOTOR_S_MM_PER_U;
 }
 
-//Timer 1 with intterupt for Wave genaration
-
-void stepper_TimerInteruptModeSetup(){
-   /* //Timer 1 16bit (overflow at 65536)
-
-  noInterrupts(); //disable intterupts global
-  // Clear registers
-  TCCR1A = 0x00; //Timer/Counter 1 Control Register A auf NULL
-  TCCR1B = 0x00; //Timer/Counter 1 Control Register B auf NULL
-  TCNT1 = 0x0000; //Timer/Counter 1 
-
-  
-
-  // f=(16000000/((TOP+1)*N))
-
-  OCR1A = 1; //TOP value
-  // CTC
-  TCCR1B |= (1 << WGM12);
-  // Prescaler 1024
-  TCCR1B |= (1 << CS11); //N prescalar S157 Manuel
-  
-  interrupts();
-*/
-
+long get_positionY(){
+    return Position_Y;
+}
+long get_positionS(){
+    return Position_S;
 }
 
-//float TOP[5]; //TOP S157 Manuel
-//int N[5] = {1,8,64,256,1024}; //Prescalar
-//long int NTop[2]; // final descision TOP & N
-
-bool setFrequenz_Timer1(unsigned int f){
-/*
-   if(f>maxfrquenz){return false;}                           // controller based max frequenz
-    //Serial.begin(115200);
-
-    for(int i = 0; i<(int)(sizeof(TOP)/sizeof(float));i++){  
-    
-        TOP[i] = ((float)F_CPU/((float)f*(float)N[i])-1);   // calc TOP for each combination 
-        if (TOP[i]> 65535 ){                                // check overflow on 16bit Register 
-            TOP[i] = -1;
-        }
-        //Serial.println(TOP[i]);
-    }
-
-    float tmp_1 = 1;
-    
-    for(int i = 0;i<(int)(sizeof(TOP)/sizeof(float));i++ ){ //find nearest matching frequenz
-        float tmp;
-        int flag = 0; //aufrunden
-
-        if(TOP[i] == -1){continue;}
-
-        tmp = TOP[i] - (long int)TOP[i];
-        if(tmp>0.5){
-            tmp = 1-tmp;
-            flag = 1;
-        }else{
-            flag = 0;
-        }
-
-        if(tmp<tmp_1){
-            NTop[0] = N[i];
-            NTop[1] = (long int)TOP[i] + flag;
-            tmp_1 = tmp;
-            
-        }
-        if (tmp == tmp_1){
-            if(NTop[1]>(long int)TOP[i] + flag){
-                NTop[0] = N[i];
-                NTop[1] = (long int)TOP[i] + flag;
-            }
-        }
-        
-    }
-    //Serial.println(NTop[0]);
-    //Serial.println(NTop[1]);
-
-
-    OCR1A = NTop[1]; //set tTOP value
-    TCCR1B &= 0xF8; // reset Timer source before rewriding
-
-    switch (NTop[0]) // set prescalar
-    {
-    case 1:
-        TCCR1B |= 0x01; //N prescalar S157 Manuel
-        break;
-    case 8:
-        TCCR1B |= 0x02; //N prescalar S157 Manuel
-        break;
-
-    case 64:
-        TCCR1B |= 0x03; //N prescalar S157 Manuel
-        break;
-    case 256:
-        TCCR1B |= 0x04; //N prescalar S157 Manuel
-        break;
-    case 1024:
-        TCCR1B |= 0x05; //N prescalar S157 Manuel
-        break;
-        
-    default:
-        return false;
-    }
-
-    return true;
-*/
+void set_positionCounterY(int64_t n){
+    PostionCounter_Y=n;
 }
-
-void stepper_timerModeRun(){
-    enableMotor(0);
-    
-   // TIMSK1 |= (1 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Enable
-    
-}
-
-void stepper_timerModeStop(){
-   
-    //TIMSK1 &= (0 << OCIE1A); //Timer/Countern, Output Compare A Match Interrupt Disable // Motor still powered
-    
-}
-double updatePosition(){
-    Position = (PostionCounter/MOTOR_Y_MICROSTEPPING)*mmPerRotaion;
-    return Position;
+void set_positionCounterS(int64_t n){
+    PostionCounter_S=n;
 }
 
 
-/*//workhorse 
-ISR(TIMER1_COMPA_vect) {
-    //Serial.println(1);
-     //TCNT1 = 0x0000; //Timer/Counter 1
-    step(MOTOR_Y_STEP_PIN);
-    step(MOTOR_S_STEP_PIN);
-    DIR ? PostionCounter-- : PostionCounter++ ;
-    
-}*/
+
 
 bool set_stepperSpeed(int speed){
     int32_t tmp_freq;

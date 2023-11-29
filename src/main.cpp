@@ -44,10 +44,11 @@ void setup(){
     Serial.begin(115200);
     Serial.println("Startet");
 
+    pinSetup();
+
     setup_timer1();
     setupt_timer2();
     setup_timer3();
-
 
     setup_limits();
     setupPages();

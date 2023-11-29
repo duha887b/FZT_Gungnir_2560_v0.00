@@ -32,16 +32,19 @@ SOFTWARE.
 
 #include <Arduino.h>
 #include "limits.h"
+#include "timer_controle.h"
 
 #define MOTOR_S_ENABLE_PIN 49
 #define MOTOR_S_STEP_PIN 44
 #define MOTOR_S_DIR_PIN 51
 #define MOTOR_S_MICROSTEPPING 400
+#define MOTOR_S_MM_PER_U 100
 
 #define MOTOR_Y_ENABLE_PIN 30
 #define MOTOR_Y_STEP_PIN 31
 #define MOTOR_Y_DIR_PIN 32
 #define MOTOR_Y_MICROSTEPPING 200
+#define MOTOR_Y_MM_PER_U 3
 
 #define DOWN 1
 #define UP 0
@@ -50,28 +53,25 @@ void pinSetup();
 
 void step();
 
-void enableMotor(bool ena);
-void setDir(bool dir);
+bool get_ENA_Y();
+bool get_ENA_S();
+bool get_DIR_Y();
+bool get_DIR_S();
 
-bool getDir();
+void set_ENA_Y(bool s);
+void set_ENA_S(bool s);
+void set_DIR_Y(bool s);
+void set_DIR_S(bool s);
 
-void stepper_TimerInteruptModeSetup();
 
-bool setFrequenz_Timer1(unsigned int f);
+void updatePosition(); //update positiion VAlues of S and Y
 
-void stepper_timerModeRun();
+long get_positionY();
+long get_positionS();
 
-void stepper_timerModeStop();
+void set_positionCounterY(int64_t n);
+void set_positionCounterS(int64_t n);
 
-bool set_stepperSpeed(int speed);
-
-bool home();// home axis and get zero ; calibrate position 
-
-bool goToPosition(float position);// in mm
-
-bool moveRelative(float distance,unsigned int speed);// in mm
-
-double updatePosition();
 
 
 #endif

@@ -87,10 +87,6 @@ void subLin_speed(){
     //set speed hard
     block_lock1 = false;
     reset_count_t1(positionL);
-    long * tmp = setupt_timerValuesFrequenz(15224);
-    long i = 1;
-    Serial.println((long)*(tmp));
-    Serial.println((long)*(tmp+ i));
   }
 
 }
