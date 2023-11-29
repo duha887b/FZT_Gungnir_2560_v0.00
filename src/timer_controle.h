@@ -31,6 +31,7 @@ SOFTWARE.
 
 #include <Arduino.h>
 #include "interface.h"
+#include "stepper.h"
 
 #define MAX_F 100000 //Hz
 

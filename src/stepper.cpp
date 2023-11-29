@@ -58,13 +58,15 @@ void pinSetup(){
     pinMode(MOTOR_S_ENABLE_PIN,OUTPUT);
     pinMode(MOTOR_S_STEP_PIN,OUTPUT);
 
-    digitalWrite(MOTOR_Y_DIR_PIN,0);
+    digitalWrite(MOTOR_Y_DIR_PIN,1);
     digitalWrite(MOTOR_Y_ENABLE_PIN,1);
     digitalWrite(MOTOR_Y_STEP_PIN,0);
 
-    digitalWrite(MOTOR_S_DIR_PIN,0);
-    digitalWrite(MOTOR_S_ENABLE_PIN,0);
+    digitalWrite(MOTOR_S_DIR_PIN,1);
+    digitalWrite(MOTOR_S_ENABLE_PIN,1);
     digitalWrite(MOTOR_S_STEP_PIN,0);
+
+    
 
 
 }
@@ -130,19 +132,35 @@ void set_positionCounterS(int64_t n){
     PostionCounter_S=n;
 }
 
-
-
-
-bool set_stepperSpeed(int speed){
-    int32_t tmp_freq;
-    Speed = speed;
-
-    speed<0 ? setDir(DOWN) : setDir(UP); // set direction 
-
-    tmp_freq  = (MOTOR_Y_MICROSTEPPING / mmPerRotaion) * abs(speed) ;
-    return setFrequenz_Timer1(tmp_freq);
+int umin_to_frequenz(float speed,float mmPerTurn, int mstep){
+    return (mstep/mmPerTurn)*abs(speed); //quantisierungsfehler = 1Hz
 }
 
+void set_speedY(float speed){
+    speed < 0 ? set_DIR_Y(DOWN): set_DIR_Y(UP);
+    set_timer2(umin_to_frequenz(speed,MOTOR_Y_MM_PER_U,MOTOR_Y_MICROSTEPPING)); 
+}
+void set_speedS(float speed){
+    speed < 0 ? set_DIR_S(DOWN) : set_DIR_S(UP);
+    set_timer3(umin_to_frequenz(speed,MOTOR_S_MM_PER_U,MOTOR_S_MICROSTEPPING));
+}
+
+
+void run_MotorY(bool r){
+    start_timer2(r);
+    set_ENA_Y(!r);
+}
+void run_MotorS(bool r){
+    start_timer3(r);
+    set_ENA_S(!r);
+}
+
+
+
+
+
+
+/*
 bool moveRelative(float distance,unsigned int speed)// in mm (direction via distance)
 {
     
@@ -162,10 +180,10 @@ bool moveRelative(float distance,unsigned int speed)// in mm (direction via dist
     return 1;
 
 }
-
+*/
 
 // TODO refractor
-int homeing_speed = 20;
+/*int homeing_speed = 20;
 bool home()// home axis and get zero ; calibrate position 
 {
    
@@ -199,8 +217,8 @@ bool home()// home axis and get zero ; calibrate position
 
     return true;
 }
-
-//TODO not tested 
+*/
+//TODO not tested ans implemented
 bool goToPosition(float position)// in mm
 {
   

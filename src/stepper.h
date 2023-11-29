@@ -38,10 +38,10 @@ SOFTWARE.
 #define MOTOR_S_STEP_PIN 44
 #define MOTOR_S_DIR_PIN 51
 #define MOTOR_S_MICROSTEPPING 400
-#define MOTOR_S_MM_PER_U 100
+#define MOTOR_S_MM_PER_U 314  // pi*diameter of spool // TODO update out of interface 
 
 #define MOTOR_Y_ENABLE_PIN 30
-#define MOTOR_Y_STEP_PIN 31
+#define MOTOR_Y_STEP_PIN 33
 #define MOTOR_Y_DIR_PIN 32
 #define MOTOR_Y_MICROSTEPPING 200
 #define MOTOR_Y_MM_PER_U 3
@@ -51,8 +51,7 @@ SOFTWARE.
 
 void pinSetup();
 
-void step();
-
+void step(int step_pin);
 bool get_ENA_Y();
 bool get_ENA_S();
 bool get_DIR_Y();
@@ -72,6 +71,13 @@ long get_positionS();
 void set_positionCounterY(int64_t n);
 void set_positionCounterS(int64_t n);
 
+int umin_to_frequenz(float speed,float mmPerTurn, int mstep); // calculate frequenz for diffrent diameters
+
+void set_speedY(float speed);
+void set_speedS(float speed);
+
+void run_MotorY(bool r);
+void run_MotorS(bool r);
 
 
 #endif

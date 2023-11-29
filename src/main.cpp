@@ -46,9 +46,9 @@ void setup(){
 
     pinSetup();
 
-    setup_timer1();
-    setupt_timer2();
-    setup_timer3();
+    setup_timer1();  // for refreshing the display
+    setupt_timer2();  // frequenz for Motor Y  -- do not start the timer here
+    setup_timer3();   // frequenz for Motor S  -- do not start the timer here
 
     setup_limits();
     setupPages();
@@ -60,9 +60,17 @@ void setup(){
 
 
     start_menu();
+
+
     
     sei(); // globale interrupt freigabe; 
     start_timer1(true); //interrupt freigabe
+
+    set_speedY(3);
+    set_speedS(100);
+
+    run_MotorY(true);
+    run_MotorS(true);
     
 
 }
