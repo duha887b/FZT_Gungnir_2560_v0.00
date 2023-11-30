@@ -144,7 +144,8 @@ void start_timer2(bool c){
 
 // Timer 2 Compare-A Interrupt-Routine
 ISR(TIMER4_COMPA_vect) {
-  step(MOTOR_Y_STEP_PIN);
+  step_y();
+
 }
 
 void set_timer2(unsigned int f){
@@ -222,6 +223,6 @@ void set_timer3(unsigned int f){
         break;
     }
 }
-ISR(TIMER3_COMPA_vect) {
-  step(MOTOR_S_STEP_PIN);
+ISR(TIMER3_COMPA_vect) { 
+  step_s();
 }

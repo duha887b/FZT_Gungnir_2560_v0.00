@@ -71,11 +71,35 @@ void pinSetup(){
 
 }
 
-void step(int step_pin){
+void step_y(){
 
-        digitalWrite(step_pin,HIGH);
+        if(ENA_Y){return;}  // crash detection 
+        else if ((DIR_Y == UP) && get_limitTop() )
+        {
+            return;
+        }else if ((DIR_Y == DOWN) && get_limitBottom())
+        {
+            return;
+        }
+
+        digitalWrite(MOTOR_Y_STEP_PIN,HIGH);
         delayMicroseconds(minPulsHIGH);
-        digitalWrite(step_pin,LOW);
+        digitalWrite(MOTOR_Y_STEP_PIN,LOW);
+
+        DIR_Y ? PostionCounter_Y-- : PostionCounter_Y++;
+    
+    
+     
+}
+
+void step_s(){
+        if(ENA_S){return;}
+
+        digitalWrite(MOTOR_S_STEP_PIN,HIGH);
+        delayMicroseconds(minPulsHIGH);
+        digitalWrite(MOTOR_S_STEP_PIN,LOW);
+
+        DIR_S ? PostionCounter_S-- : PostionCounter_S++;
     
     
      
@@ -132,6 +156,13 @@ void set_positionCounterS(int64_t n){
     PostionCounter_S=n;
 }
 
+int64_t get_positionCounterY(){
+    return PostionCounter_Y;
+}
+int64_t get_positionCounterS(){
+    return PostionCounter_S;
+}
+
 int umin_to_frequenz(float speed,float mmPerTurn, int mstep){
     return (mstep/mmPerTurn)*abs(speed); //quantisierungsfehler = 1Hz
 }
@@ -161,7 +192,7 @@ void run_MotorS(bool r){
 
 
 /*
-bool moveRelative(float distance,unsigned int speed)// in mm (direction via distance)
+bool moveRelative_MotorY(float distance,float speed)// in mm (direction via distance)
 {
     
     double long tmp_positionVictory = updatePosition() + distance; // calculate new position reletive to the current position
@@ -179,8 +210,8 @@ bool moveRelative(float distance,unsigned int speed)// in mm (direction via dist
    
     return 1;
 
-}
-*/
+}*/
+
 
 // TODO refractor
 /*int homeing_speed = 20;

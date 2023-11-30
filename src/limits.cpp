@@ -34,11 +34,11 @@ volatile bool limit_TOP = 1;
 volatile bool limit_BOTTON = 1;
 
 bool get_limitTop(){
-    return digitalRead(sw_TOP);
+    return !digitalRead(sw_TOP);
 }
 
 bool get_limitBottom(){
-    return digitalRead(sw_BOTTOM);;
+    return !digitalRead(sw_BOTTOM);;
 }
 
 // FIXME interrupt levels zu keinem interrupt ändern
