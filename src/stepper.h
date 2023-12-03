@@ -46,6 +46,8 @@ SOFTWARE.
 #define MOTOR_Y_MICROSTEPPING 200
 #define MOTOR_Y_MM_PER_U 3
 
+#define HOME_SPEED 25
+
 #define DOWN 1
 #define UP 0
 
@@ -67,8 +69,8 @@ void set_DIR_S(bool s);
 
 void updatePosition(); //update positiion VAlues of S and Y
 
-long get_positionY();
-long get_positionS();
+long double get_positionY();
+long double get_positionS();
 
 void set_positionCounterY(int64_t n);
 void set_positionCounterS(int64_t n);

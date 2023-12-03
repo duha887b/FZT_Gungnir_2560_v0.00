@@ -331,3 +331,23 @@ void vars_Step(bool DIR,int sp){
         tft.setCursor(120,120);
         tft.print(sp);
     }
+
+void spool_setStart(bool b){
+
+    b ? tft.setTextColor(GREEN) : tft.setTextColor(RED);
+    tft.setCursor((MAX_X/2)+10,280);
+    tft.print("START");
+
+}
+
+
+void probe_setStart(bool b){
+
+    b ? tft.setTextColor(GREEN) : tft.setTextColor(RED);
+    tft.setCursor(10,280);
+    tft.print("START");
+}
+
+
+
+    

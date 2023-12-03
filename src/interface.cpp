@@ -41,9 +41,15 @@ bool refreschValues_S;
 volatile bool block_lock1;
 volatile bool block_lock2;
 
-float linSpeed = 0;
-float spoolSpeed = 0;
+float linSpeed = 0.05;
+float spoolSpeed = 2;
 float spoolDiameter = 100;
+
+float tmp_count_s = 0 ;
+float tmp_count_y = 0;
+
+bool lin_jumpBack = false;
+bool spool_jumpBack = false;
 
 
 // Array von Funktionspointern
@@ -65,19 +71,29 @@ void main_Lin(){
     draw_cursor(0,positionL);
 }
 
+
+
 void subLin_speed(){
   block_lock1 = true;
   
-
+  
+  
   //TODO auf bestehenden wert zurückgreifen
-  linSpeed = ((get_count_t1()- positionL )*0.5);
+  
+
 
   if(linSpeed<0){
     linSpeed=0;
     reset_count_t1(positionL);
   }
 
-  probe_setSpeed(linSpeed);
+  if(get_count_t1() != tmp_count_y){
+    linSpeed += ((get_count_t1()- positionL - tmp_count_y)*0.05);
+    tmp_count_y = get_count_t1();
+    probe_setSpeed(linSpeed);
+  }
+
+  
 
 
 
@@ -87,6 +103,7 @@ void subLin_speed(){
     //set speed hard
     block_lock1 = false;
     reset_count_t1(positionL);
+    tmp_count_y = 0 ;
   }
 
 }
@@ -100,12 +117,64 @@ void subLin_Jog(){
 }
 
 void subLin_home(){
+  block_lock1 =  true;
+
+  if(!lin_jumpBack){
+    set_speedY(-1*(HOME_SPEED));
+    run_MotorY(true);
+  }
+
 
 }
 
 void subLin_START(){
+  block_lock1 = true;
+
+  if(!lin_jumpBack){
+    probe_setStart(true);
+    set_speedY(linSpeed);
+    run_MotorY(true);
+    probe_setSpeed(linSpeed);
+    tmp_count_y = positionL;
+
+    lin_jumpBack = true;
+  }
+
+  if(get_count_t1() != tmp_count_y){
+    linSpeed += ((get_count_t1()- positionL - tmp_count_y)*0.05);
+    tmp_count_y = get_count_t1();
+    probe_setSpeed(linSpeed);
+
+  }
+
+    
+
+  
+
+  if((!get_lockT1() && get_count_t1() == positionL) || get_limitBottom()){
+    
+    
+    block_lock1 = false;
+    set_lockT1(false);
+    run_MotorY(false);
+    probe_setStart(false);
+    reset_count_t1(positionL);
+    lin_jumpBack = false;
+    tmp_count_y = 0 ;
+
+
+  }
+
+
+  
+
+
+      
+  
 
 }
+
+
 
 void (*funktionsListe_LIN[])(void) = {main_Lin, subLin_speed, subLin_Zero,subLin_Jog,subLin_home,subLin_START};
 
@@ -130,14 +199,21 @@ void (*funktionsListe_LIN[])(void) = {main_Lin, subLin_speed, subLin_Zero,subLin
 void subSpool_speed(){
    block_lock2 = true;
   
-
-  //TODO auf bestehenden wert zurückgreifen
-  spoolSpeed = ((get_count_t2()- positionC )*1);
+  
+  
+  
+  
   if(spoolSpeed<0){
     spoolSpeed=0;
     reset_count_t2(positionC);
   }
-  spool_setSpeed(spoolSpeed);
+
+  if(get_count_t2() != tmp_count_s){
+    spoolSpeed += ((get_count_t2()- positionC- tmp_count_s )*0.5);
+    tmp_count_s = get_count_t2();
+    spool_setSpeed(spoolSpeed);
+  }
+  
 
 
 
@@ -147,19 +223,31 @@ void subSpool_speed(){
     //set speed hard
     block_lock2 = false;
     reset_count_t2(positionC);
+    tmp_count_s = 0;
   }
 }
 
 void subSpool_diameter(){
   block_lock2 = true;
 
-  spoolDiameter = ((get_count_t2()-positionC)*5);
-  spool_setDiameter(spoolDiameter);
+  
+
+  if(spoolDiameter<0){
+    spoolDiameter=0;
+    reset_count_t2(positionC);
+  }
+
+  if(get_count_t2() != tmp_count_s){
+    spoolDiameter += ((get_count_t2()- positionC- tmp_count_s )*1);
+    tmp_count_s = get_count_t2();
+    spool_setDiameter(spoolDiameter);
+  }
   
 
   if(!get_lockT2()){
     block_lock2 = false;
     reset_count_t2(positionC);
+    tmp_count_s = 0;
   }
 
 }
@@ -169,6 +257,7 @@ void subSpool_Jog(){
 }
 
 void subSpool_START(){
+  spool_setStart(true);
 
 }
 
@@ -181,8 +270,12 @@ void start_menu(){
   block_lock2 = false;
   positionC = 0;
   positionL = 0;
+  tmp_count_s = 0;
+  tmp_count_y = 0;
 
   spool_setDiameter(spoolDiameter);
+  spool_setSpeed(spoolSpeed);
+  probe_setSpeed(linSpeed);
 
   
 
@@ -203,6 +296,12 @@ if(get_lockT2() || block_lock2){
 }else{
   funktionsListe_SPOOL[0]();
 }
+
+updatePosition();
+//probe_setPosition(get_positionY());
+//Serial.println((float)get_positionY());
+
+
 
 //Serial.print(get_lockT1() && !block_lock1);
 //Serial.print(get_lockT2() && !block_lock2);

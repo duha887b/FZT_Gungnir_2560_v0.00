@@ -66,11 +66,7 @@ void setup(){
     sei(); // globale interrupt freigabe; 
     start_timer1(true); //interrupt freigabe
 
-    set_speedY(-0.05);
-    set_speedS(-400);
-
-    run_MotorY(true);
-    run_MotorS(false);
+    
     
 
 }

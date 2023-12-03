@@ -120,7 +120,7 @@ ISR(TIMER1_COMPA_vect) {
   update_turnpuls1();
   update_turnpuls2();
   refresh_interface();
-  //Serial.println("timer1");
+  //Serial.println(get_limitTop());
 }
 
 // Timer/Counter 4

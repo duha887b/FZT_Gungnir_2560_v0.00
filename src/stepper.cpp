@@ -42,10 +42,10 @@ int32_t Speed_Y;//mm/s
 int32_t Speed_S;//mm/s
 
 
-volatile long double Position_Y = 0;
+volatile float Position_Y = 0;
 volatile int64_t PostionCounter_Y =0; // count relative steps from zero position
 
-volatile long double Position_S = 0;
+volatile float Position_S = 0;
 volatile int64_t PostionCounter_S =0;
 
 void pinSetup(){
@@ -87,6 +87,7 @@ void step_y(){
         digitalWrite(MOTOR_Y_STEP_PIN,LOW);
 
         DIR_Y ? PostionCounter_Y-- : PostionCounter_Y++;
+        //Serial.println((int)PostionCounter_Y);
     
     
      
@@ -138,14 +139,15 @@ void set_DIR_S(bool s){
 }
 
 void updatePosition(){
-    Position_Y = (PostionCounter_Y/MOTOR_Y_MICROSTEPPING)*MOTOR_Y_MM_PER_U;
-    Position_S = (PostionCounter_S/MOTOR_S_MICROSTEPPING)*MOTOR_S_MM_PER_U;
+    Position_Y = ((float)PostionCounter_Y/MOTOR_Y_MICROSTEPPING)*MOTOR_Y_MM_PER_U;
+    Position_S = ((float)PostionCounter_S/MOTOR_S_MICROSTEPPING)*MOTOR_S_MM_PER_U;
+    //Serial.println(Position_S);
 }
 
-long get_positionY(){
+long double get_positionY(){
     return Position_Y;
 }
-long get_positionS(){
+long double get_positionS(){
     return Position_S;
 }
 
