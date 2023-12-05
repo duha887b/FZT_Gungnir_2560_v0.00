@@ -252,7 +252,7 @@ bool home()// home axis and get zero ; calibrate position
 }
 */
 //TODO not tested ans implemented
-bool goToPosition(float position)// in mm
+/*bool goToPosition(float position)// in mm
 {
   
 
@@ -263,6 +263,33 @@ bool goToPosition(float position)// in mm
     }
     
 
+}*/
+
+bool moveRelative_MotorY(float distance,float currentPosition){
+
+    
+    if(distance < 0){
+        if((currentPosition + distance) < (float)get_positionY()){
+                // stepping over interrupt , implementet in timer_controle
+             return true;   
+             Serial.println((currentPosition + distance) < (float)get_positionY());
+                
+        }
+        
+        
+    }else{
+        if((currentPosition + distance) > (float)get_positionY()){
+                // stepping over interrupt , implementet in timer_controle
+                Serial.println("wait up");
+        }
+        Serial.println((currentPosition + distance) > (float)get_positionY());
+        return true;
+
+    }
+    
+    return false;
 }
+
+//bool moveRelative_MotorY(float distance,float speed){}
 
 

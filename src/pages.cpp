@@ -264,11 +264,22 @@ void probe_setPosition(double pos){
 
     tft.setTextSize(2);
     tft.setCursor(150,80);
-    tft.fillRect(150,80,70,17,BLACK);
+    tft.fillRect(150,80,85,17,BLACK);
 
     tft.setCursor(150,80);
     tft.setTextSize(2);
     tft.print(pos,2);
+}
+
+
+void spool_setPosition(double pos){
+    tft.setTextSize(2);
+    tft.setCursor(150 + MAX_X/2,80);
+    tft.fillRect(150 + MAX_X/2,80,85,17,BLACK);
+
+    tft.setCursor(150 + MAX_X/2,80);
+    tft.setTextSize(2);
+    tft.print((pos/1000),2); // display in m
 }
 
 void probe_setSpeed(float sp){
@@ -278,7 +289,7 @@ void probe_setSpeed(float sp){
 
     tft.setCursor(150,130);
     tft.setTextSize(2);
-    tft.print(sp);
+    tft.print(sp,3);
 }
 
 void spool_setSpeed(float sp){
@@ -301,8 +312,8 @@ void spool_setDiameter(float dia){
 void probe_setJog(bool jog){
     
     tft.setTextSize(2);
-    tft.setCursor(150,180);
-    tft.fillRect(150,180,70,17,BLACK);
+    tft.setCursor(150,230);
+    tft.fillRect(150,230,70,17,BLACK);
 
     jog ? tft.print("Run") : tft.print("Stop");
         
@@ -310,11 +321,21 @@ void probe_setJog(bool jog){
     
 }
 
-void probe_setZero(char zero[10]){
+void probe_setJogDistance(float jog){
+    tft.setTextSize(2);
+    tft.setTextColor(WHITE);
+    tft.setCursor(150,230);
+    tft.fillRect(150,230,70,17,BLACK);
+
+    tft.print(jog);
+
+}
+
+void probe_setZero(float zero){
 
     
-
-    tft.setCursor(150,250);
+    tft.fillRect(150,180,70,17,BLACK);
+    tft.setCursor(150,180);
     tft.setTextSize(2);
     tft.print(zero);
 }

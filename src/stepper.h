@@ -46,7 +46,7 @@ SOFTWARE.
 #define MOTOR_Y_MICROSTEPPING 200
 #define MOTOR_Y_MM_PER_U 3
 
-#define HOME_SPEED 25
+#define HOME_SPEED 5
 
 #define DOWN 1
 #define UP 0
@@ -88,7 +88,7 @@ void run_MotorS(bool r);
 
 bool moveRelative_MotorS(float distance,float speed);
 
-bool moveRelative_MotorY(float distance,float speed);
+bool moveRelative_MotorY(float distance,float currentPosition);
 
 
 #endif

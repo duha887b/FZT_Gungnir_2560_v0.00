@@ -65,13 +65,17 @@ void probePage();
 
 void probe_setPosition(double pos);
 
+void spool_setPosition(double pos);
+
+
 void probe_setSpeed(float sp);
 
 void spool_setSpeed(float sp);
 
 void probe_setJog(bool jog);
+void probe_setJogDistance(float jog);
 
-void probe_setZero(char zero[10]);
+void probe_setZero(float zero);
 
 void draw_cursor(int side, char16_t newPosition);
 
