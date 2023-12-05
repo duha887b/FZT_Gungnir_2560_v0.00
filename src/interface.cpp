@@ -56,6 +56,7 @@ bool spool_jumpBack = false;
 float tmp_position_y = 0;
 
 int count_delay = 0;
+float tmp_jog;
 
 
 // Array von Funktionspointern
@@ -127,6 +128,39 @@ void subLin_Zero(){
 }
 
 void subLin_Jog(){
+  block_lock1 = true;
+
+  if((get_count_t1() != positionL) && !lin_jumpBack){
+    linJogDistance = ((get_count_t1()- positionL )*1);
+    probe_setJogDistance(linJogDistance);
+  }
+
+  if(!get_lockT1() && !lin_jumpBack){
+    set_lockT1(true);
+    reset_count_t1(positionL);
+    tmp_jog = get_positionY();
+    lin_jumpBack = true;
+    linJogDistance<0 ? set_speedY(-1*5) : set_speedY(5);
+    run_MotorY(true);
+  }
+
+  if(get_lockT1() && lin_jumpBack){
+    updatePosition();
+    
+    if(((get_positionY()>= (tmp_jog + linJogDistance) ) && linJogDistance > 0) || ((get_positionY() <= (tmp_jog + linJogDistance) ) && linJogDistance < 0) || linJogDistance == 0){
+      run_MotorY(false);
+      reset_count_t1(positionL);
+      block_lock1 = false;
+      set_lockT1(false);
+      lin_jumpBack=false;
+
+    }
+
+  }
+
+  
+  
+    
   
 }
 
