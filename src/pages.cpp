@@ -78,7 +78,7 @@ void landingPage(){
     tft.setCursor(165,160);
     tft.setTextSize(2);
     tft.setTextColor(WHITE);
-    tft.print("Gungnir_00.0");
+    tft.print("Gungnir_00.1");
     delay(500);
     tft.fillScreen(BLACK);
     tft.drawLine(0,0,180,0,WHITE);
@@ -96,7 +96,7 @@ void landingPage(){
 
     tft.setCursor(400,15);
     tft.setTextSize(2);
-    tft.print("v00.0");
+    tft.print("v00.1");
 
     
 
