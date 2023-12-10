@@ -46,6 +46,7 @@ float linSpeed = 0.025;
 float spoolSpeed = 2;
 float spoolDiameter = 100;
 float linJogDistance = 0;
+float spoolJogDistance = 0;
 
 float tmp_count_s = 0 ;
 float tmp_count_y = 0;
@@ -57,6 +58,7 @@ float tmp_position_y = 0;
 
 int count_delay = 0;
 float tmp_jog;
+float tmp_jog_2;
 
 
 // Array von Funktionspointern
@@ -76,6 +78,9 @@ void main_Lin(){
     }
 
     draw_cursor(0,positionL);
+}
+float get_spoolDiameter(){
+  return spoolDiameter;
 }
 
 
@@ -155,13 +160,7 @@ void subLin_Jog(){
       lin_jumpBack=false;
 
     }
-
   }
-
-  
-  
-    
-  
 }
 
 void subLin_home(){
@@ -314,6 +313,35 @@ void subSpool_diameter(){
 }
 
 void subSpool_Jog(){
+
+  block_lock2 = true;
+
+  if((get_count_t2() != positionC) && !spool_jumpBack){
+    spoolJogDistance = ((get_count_t2()- positionC )*5);
+    spool_setJogDistance(spoolJogDistance);
+  }
+
+  if(!get_lockT2() && !spool_jumpBack){
+    set_lockT2(true);
+    reset_count_t2(positionC);
+    tmp_jog_2 = get_positionY();
+    spool_jumpBack = true;
+    spoolJogDistance<0 ? set_speedS(-1*10) : set_speedS(10);
+    run_MotorS(true);
+  }
+
+  if(get_lockT2() && spool_jumpBack){
+    updatePosition();
+    
+    if(((get_positionS()>= (tmp_jog_2 + spoolJogDistance) ) && spoolJogDistance > 0) || ((get_positionS() <= (tmp_jog_2 + spoolJogDistance) ) && spoolJogDistance < 0) || spoolJogDistance == 0){
+      run_MotorS(false);
+      reset_count_t2(positionC);
+      block_lock2 = false;
+      set_lockT2(false);
+      spool_jumpBack=false;
+
+    }
+  }
 
 }
 

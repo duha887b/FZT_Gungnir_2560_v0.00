@@ -309,6 +309,15 @@ void spool_setDiameter(float dia){
     tft.setTextSize(2);
     tft.print(dia);
 }
+
+void spool_setJogDistance(float jog){
+    tft.setTextSize(2);
+    tft.setTextColor(WHITE);
+    tft.setCursor(150 + MAX_X/2,230);
+    tft.fillRect(150+ MAX_X/2,230,70,17,BLACK);
+
+    tft.print(jog);
+}
 void probe_setJog(bool jog){
     
     tft.setTextSize(2);

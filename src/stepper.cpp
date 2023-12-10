@@ -140,7 +140,7 @@ void set_DIR_S(bool s){
 
 void updatePosition(){
     Position_Y = ((float)PostionCounter_Y/MOTOR_Y_MICROSTEPPING)*MOTOR_Y_MM_PER_U;
-    Position_S = ((float)PostionCounter_S/MOTOR_S_MICROSTEPPING)*MOTOR_S_MM_PER_U;
+    Position_S = ((float)PostionCounter_S/MOTOR_S_MICROSTEPPING)*get_spoolDiameter()*3.14;
     //Serial.println(Position_S);
 }
 
@@ -175,7 +175,7 @@ void set_speedY(float speed){
 }
 void set_speedS(float speed){
     speed < 0 ? set_DIR_S(DOWN) : set_DIR_S(UP);
-    set_timer3(umin_to_frequenz(speed,MOTOR_S_MM_PER_U,MOTOR_S_MICROSTEPPING));
+    set_timer3(umin_to_frequenz(speed,get_spoolDiameter() * 3.14,MOTOR_S_MICROSTEPPING));
 }
 
 

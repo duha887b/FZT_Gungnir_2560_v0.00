@@ -38,6 +38,7 @@ SOFTWARE.
 void start_menu();
 void refresh_interface();
 
+float get_spoolDiameter();
 
 
 

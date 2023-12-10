@@ -33,12 +33,13 @@ SOFTWARE.
 #include <Arduino.h>
 #include "limits.h"
 #include "timer_controle.h"
+#include "interface.h"
 
 #define MOTOR_S_ENABLE_PIN 49
 #define MOTOR_S_STEP_PIN 44
 #define MOTOR_S_DIR_PIN 51
 #define MOTOR_S_MICROSTEPPING 400
-#define MOTOR_S_MM_PER_U 314  // pi*diameter of spool // TODO update out of interface 
+//#define MOTOR_S_MM_PER_U 314  // pi*diameter of spool // TODO update out of interface 
 
 #define MOTOR_Y_ENABLE_PIN 32
 #define MOTOR_Y_STEP_PIN 33
