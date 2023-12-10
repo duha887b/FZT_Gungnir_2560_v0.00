@@ -208,7 +208,7 @@ void subLin_START(){
     
     probe_setSpeed(linSpeed);
     reset_count_t1(positionL);
-    set_speedY(linSpeed);
+    set_speedY(-1 * linSpeed);
 
   }
   
@@ -362,14 +362,30 @@ void subSpool_START(){
     run_MotorS(true);
     spool_setStart(true);
     spool_jumpBack = true;
+    tmp_count_s = 0;
   }
 
-  if(!get_lockT2()){
+  if((get_count_t2() != positionC) && spool_jumpBack){
+
+    spoolSpeed += ((get_count_t2()- positionC - tmp_count_s)*1);
+    if(spoolSpeed <=0 ){
+      spoolSpeed = 0;
+    }
+    
+    spool_setSpeed(spoolSpeed);
+    reset_count_t2(positionC);
+    set_speedS(spoolSpeed);
+
+  }
+
+  if(!get_lockT2()  && get_count_t2() == positionC ){
     reset_count_t2(positionC);
     block_lock2 = false;
     run_MotorS(false);
+    spool_setStart(false);
     spool_jumpBack = false;
     tmp_count_s = 0;
+    set_lockT2(false);
   }
 
 }
