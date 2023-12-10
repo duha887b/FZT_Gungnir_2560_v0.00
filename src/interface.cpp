@@ -194,15 +194,21 @@ void subLin_START(){
     set_speedY(-1 * linSpeed);
     run_MotorY(true);
     probe_setSpeed(linSpeed);
-    tmp_count_y = positionL;
+    tmp_count_y = 0;
 
     lin_jumpBack = true;
   }
 
-  if(get_count_t1() != tmp_count_y){
+  if((get_count_t1() != positionL) && lin_jumpBack){
+
     linSpeed += ((get_count_t1()- positionL - tmp_count_y)*0.005);
-    tmp_count_y = get_count_t1();
+    if(linSpeed <=0 ){
+      linSpeed = 0;
+    }
+    
     probe_setSpeed(linSpeed);
+    reset_count_t1(positionL);
+    set_speedY(linSpeed);
 
   }
   
