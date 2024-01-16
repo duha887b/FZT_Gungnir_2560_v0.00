@@ -1,0 +1,107 @@
+\documentclass[german,
+beleg,
+lot,
+lof,
+notitlepage,
+utf8,
+hyperref,
+bibnum
+]{zihpub}
+
+\usepackage{blindtext}
+\usepackage{longtable}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage{enumitem} 
+\usepackage{wrapfig}
+
+
+
+% Symbol/Abkürzungsverzeichnis %
+%\usepackage[printonlyused,nohyperlinks]{acronym}
+\usepackage[printonlyused]{acronym}
+
+
+
+\bibfiles{doku}
+
+
+
+% Titelseite
+\AtBeginDocument{ 
+
+% * Deckblatt %
+\input{Deckblatt}
+
+% * Aufgabenstellung %
+\includepdf[]{an_pdf/Aufgabenstellung.pdf}
+
+% * Kurzfassung / Abstarct %
+\include{Kurzfassung}
+
+}
+% *copyright Erklärung
+
+%\copyrighterklaerung{Hier soll jeder Autor die von ihm eingeholten
+%Zustimmungen der Copyright-Besitzer angeben bzw. die in Web Press
+%Rooms angegebenen generellen Konditionen seiner Text- und
+%Bild\"ubernahmen zitieren.}
+
+
+% * Danksagung %
+%\acknowledgments{Die Danksagung...}
+
+\begin{document}
+
+
+% --- Inhalt --- % 
+
+% *  Abkürzungsverzeichnis %
+\addcontentsline{toc}{chapter}{\protect Abkürzungsverzeichnis}
+\chapter*{Abkürzungsverzeichnis}
+\input{Abkuerzungen}
+
+
+% *  Einleitung und Problemstellung %
+\chapter{Einleitung und Problemstellung}
+%Aus den veröfentlichungen vllt. 
+\input{Einleitung_und_Problemstellung}
+
+
+% *  Einleitung und Problemstellung %
+\chapter{Stand der Technik}
+\input{Stand_der_Technik}
+
+% *  Präzisierung der Aufgabenstellung %
+\chapter{Präzisierung der Aufgabenstellung}
+\input{Praezisierung_der_Aufgabenstellung}
+
+
+% *  Entwurf %
+\chapter{Entwurf}
+\input{Entwurf}
+
+% *  Bedienungsanleitung %
+\chapter{Bedienungsanleitung}
+\input{Bedienungsanleitung}
+
+% *  Erprobung des Versuchsstandes %
+\chapter{Erprobung des Versuchsstandes}
+\input{Erprobung_des_Versuchsstandes}
+
+
+% *  Zusammenfassung und Ausblick %
+\chapter{Zusammenfassung und Ausblick}
+\input{Zusammenfassung_und_Ausblick}
+
+
+
+
+
+
+    %\input{Anhang}
+
+    
+    
+
+\end{document}

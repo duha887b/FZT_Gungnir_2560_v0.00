@@ -1,0 +1,25 @@
+%\section{Aufgabenstellung}
+Ziel der Studienarbeit ist die Entwicklung eines Versuchstandes, welcher die kleinskalige Produktion von bimorphen Sensor- und Aktorgarnen ermöglicht. Der Hauptgrund für die Eigenentwicklung ist, das es bisher keine auf dem Markt verfügbaren Systeme gibt.
+
+% --- keine Ideen was hier noch hin kann :d --- %
+
+\section{ Analyse des Prozesses}
+Der Grobe Ablauf des Prozesses wird hier umrissen und im weiteren näher Spezifiziert. 
+Im allgemeinen soll folgendes Realisiert werden: \\ 
+Die Anlage soll die Aufnahme einer Vorkonfektionierten Preform ermöglichen. Diese soll  in eine Heizeinheit eingeführt werden. Wie in Kapitel 3.2 beschrieben soll es dort zu einer Verjüngung der Preform auf ein Endmaß kommen. Die Faser soll anschließend aufgenommen und für weiter Prozesse zu verfügung gestellt werden.
+Um den Prozess besser Analysieren zu können wird er in vier Teilprozesse geteilt. Erstens die Heizeinheit, welche die Temperaturführund des Materials übernimmt. Zweitens die Fördereinheit, die zur Bereitstellung des Ausgangsmaterials dient. Drittens der Abzug, welcher zur Aufnahme und Bewegung des Garns verwendet werden soll. Viertens die Steuerung welche sich aus der Schaltung und der Software zusammensetzt und alle Teilprozesse sinnvoll miteinander verbindet.
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Heizeinheit} \\
+    Die Heizung sollte in der Lage sein von allen seiten hize auf das Material zu übertragen was schnell auf einen Rohrofen schließen lässt, da sich dort das Material endlos einführen lässt. Wichtig ist weiterhin das eine Prizise und Stabile Temperaturführung möglich ist, da sich diese Stark auf die Viskosität der Preform auswirkt. So kann verhindert werden das eine Viskositätsschwankung zu einer Ungleichmäßigen Faser führt. Auch der Anwenderschutz sollte berücksichtigt werden, Was bedeutet das sowohl an eine Hizeschirmung sowie eine Notfallabschaltung der Temperatur möglich sein sollte. Die beiheizbare Länge des Ofens ist ebenfalls Faktor der die Art und weise der Faserbildung beeinflussen kann und sollte so gewählt werden das es zu einem stabilen fluss kommen kann. Ein Problem was allgemein bei Heizungen auftritt ist die Trägheit. Da sich deshalb schnelle Temperatursprünge mit einem Ofen nicht realisieren lassen muss der Prozess so einstellbar sein das dies nicht nötig ist und das Temperaturband nur langsam zu durchfahren ist. 
+    \item \textbf{Fördereinheit}\\
+    Die Fördereinheit sollte in der Lage sein verschiedene Querschnitte von Materialien aufzunehmen und in die Öffnung des Ofens zu befördern. besonders wichtig ist dabei das sehr langsame Bewegungen möglich sind, da in  Quellen von Fördergeschwindigkeiten von weinigen $\mu m *s^{-1}$ \cite{Zhao.2016} berichtet wird.
+    \item \textbf{Abzugseinheit}\\
+    Der Abzug ist dafür verantwortlich einen Definierten Zug auf das garn auszüben und so an der Dickenkalibrierung Anteil  zu nehmen. Wichtig ist auch das er in der lage ist ein breites Spektrum an Abzugsgeschwindigkeiten abzubilden um möglichst flexibel in der Materialauswahl zu bleiben. Diese Einheit ist weiterhin dafür Zuständig die Faser in geeigneter Art und weise Aufzunehmen und für die Weiterverarbeitung bereitzustellen. 
+    \item \textbf{Steuerungseinheit}\\
+    Die Steurung unterteilt sich in die Implementierung der Software und die Bereitstellung der Elektronik welche Aktoren und Sensoren verbindet. Die Elektronik sollte sowohl einen Personen und Sachschutz wie auch die Korrekte Ausführung des Prozesses ermöglichen. Es ist wichtig das im Betrieb auf alle Parameter der Anlage zugegriffen werden kann um Verschiedenen Einflüssen manuell entgegenwirken zu können. Da es sich um einen Versuchstand handelt sollte auf große Automatismen verzichtet werden um in jedem Durchlauf klar nachvollziehen zu können was passiert ist. Sollte sich im weiteren verlauf des Versuches aus den Daten eine gute Automatisierung ergeben ist dies der Nächte schritt, welcher jedoch nicht zwingender Bestandteil der ersten Ausführung der Anlage ist.
+   
+\end{enumerate}
+
+\section{Anforderungsliste}
+\input{anforderungsliste}
